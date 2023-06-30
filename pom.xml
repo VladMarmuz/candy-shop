@@ -24,6 +24,7 @@
         <hibernate-validator.version>8.0.0.Final</hibernate-validator.version>
         <jakarta-validation.version>3.0.2</jakarta-validation.version>
         <jjwt.version>0.11.5</jjwt.version>
+        <liquibase.version>4.20.0</liquibase.version>
     </properties>
 
     <dependencies>
@@ -105,6 +106,13 @@
             <version>${jjwt.version}</version>
             <scope>runtime</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
+        </dependency>
+
 
     </dependencies>
 
