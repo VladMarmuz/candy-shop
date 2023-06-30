@@ -8,7 +8,8 @@ import com.candyshop.entity.User;
 import com.candyshop.mappers.UserMapper;
 import com.candyshop.service.AuthService;
 import com.candyshop.service.UserService;
-import com.candyshop.validation.OnCreate;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -21,18 +22,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
+@Tag(name = "Auth Controller", description = "Auth API")
 public class AuthController {
+
     private final AuthService authService;
     private final UserService userService;
-
     private final UserMapper userMapper;
 
     @PostMapping("/login")
-    public UserLoginResponse login(@Validated @RequestBody final UserLoginRequest loginRequest) {
+    public UserLoginResponse login(@Validated @RequestBody UserLoginRequest loginRequest) {
         return authService.login(loginRequest);
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Method for registration user")
     public UserRegistrationRequest register(@Validated @RequestBody UserRegistrationRequest userRegistrationRequest) {
         User user = userMapper.toEntity(userRegistrationRequest);
         User createdUser = userService.create(user);

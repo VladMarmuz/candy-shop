@@ -2,6 +2,12 @@ package com.candyshop.config;
 
 import com.candyshop.auth.JwtTokenFilter;
 import com.candyshop.auth.JwtTokenManager;
+import io.swagger.v3.oas.annotations.security.SecuritySchemes;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +39,27 @@ public class ApplicationConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+
+    @Bean
+    public OpenAPI openAPI() {
+        return new OpenAPI().
+                addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                .components(
+                        new Components()
+                                .addSecuritySchemes("bearerAuth",
+                                        new SecurityScheme()
+                                                .type(SecurityScheme.Type.HTTP)
+                                                .scheme("bearer")
+                                                .bearerFormat("JWT")
+                                )
+                )
+                .info(new Info()
+                        .title("Candy Shop API")
+                        .description("Spring boot application")
+                        .version("1.0")
+                );
+    }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {

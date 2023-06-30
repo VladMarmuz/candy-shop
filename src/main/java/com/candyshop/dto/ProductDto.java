@@ -1,10 +1,14 @@
 package com.candyshop.dto;
 
 import com.candyshop.entity.enums.Balance;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
+@Data
+@Schema(description = "Product DTO")
 public class ProductDto {
 
     private Long id;

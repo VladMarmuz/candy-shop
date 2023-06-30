@@ -6,6 +6,7 @@ import com.candyshop.exception.ResourceMappingException;
 import com.candyshop.exception.ResourceNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,6 +23,12 @@ public class ControllerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ExceptionBody handleResourceNotFound(ResourceNotFoundException e){
         return new ExceptionBody(e.getMessage());
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionBody handleAuthentication(AuthenticationException e){
+        return new ExceptionBody("Authentication failed.");
     }
 
     @ExceptionHandler(ResourceMappingException.class)
