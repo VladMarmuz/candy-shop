@@ -8,8 +8,9 @@ spring:
     init:
       mode: always
       continue-on-error: false
+
 security:
   jwt:
-    secret: aGVsbG9mcm9tY2F0Y2h0aGVtb21lbnRhcHBsaWNhdGlvbnVzZXRoaXNhcHB3aXRob3V0YW55RGlmZmljdWx0aWVz
+    secret: bWFybXV6Q2FuZHlTaG9wQXBwbGljYXRpb25Gb3JUYWtlQmlnU3VtT2ZNYW55
     access: 3600000
     refresh: 2592000000

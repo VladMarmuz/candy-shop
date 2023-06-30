@@ -8,4 +8,6 @@ public class UserLoginRequest {
 
     @NotNull(message = "Email must be not null")
     private String email;
+
+    private String password;
 }
