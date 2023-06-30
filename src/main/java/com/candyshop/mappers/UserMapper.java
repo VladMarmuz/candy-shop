@@ -1,8 +1,6 @@
 package com.candyshop.mappers;
 
-import com.candyshop.dto.BasketDto;
 import com.candyshop.dto.auth.UserRegistrationRequest;
-import com.candyshop.entity.Basket;
 import com.candyshop.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;

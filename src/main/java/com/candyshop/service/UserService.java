@@ -41,6 +41,7 @@ public class UserService implements UserDetailsService {
         return currentUser;
     }
 
+    @Transactional
     public User create(User user) {
         if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
             throw new IllegalStateException("User already exists.");
@@ -49,6 +50,7 @@ public class UserService implements UserDetailsService {
         user.setRole(Role.ROLE_USER);
         user.setEnabled(false);
         userRepository.save(user);
+
         return user;
     }
 

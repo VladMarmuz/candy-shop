@@ -2,6 +2,7 @@ package com.candyshop.entity;
 
 import com.candyshop.entity.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.util.List;
@@ -23,6 +24,9 @@ public class User {
 
     private String name;
 
+    /*@Pattern(regexp = "^(\\+375|80)(29|25|44|33)(\\d{3})(\\d{2})(\\d{2})$",
+            message = "The phone should be like example")*/
+    @Column(name = "phone_number")
     private String phoneNumber;
 
     private String email;
@@ -38,8 +42,8 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Order> orders;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "basket_id", referencedColumnName = "basket_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "basket_id")
     private Basket basket;
 
     @Override
