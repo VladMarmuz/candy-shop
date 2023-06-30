@@ -1,5 +1,3 @@
-create schema if not exists candyShop;
-
 CREATE TABLE IF NOT EXISTS baskets
 (
     basket_id SERIAL PRIMARY KEY
@@ -57,4 +55,4 @@ CREATE TABLE IF NOT EXISTS basket_product
     basket_id  BIGINT REFERENCES baskets (basket_id)  ON DELETE CASCADE ON UPDATE NO ACTION ,
     product_id BIGINT REFERENCES products (product_id) ON DELETE CASCADE ON UPDATE NO ACTION ,
     PRIMARY KEY (basket_id, product_id)
-    )
+)
