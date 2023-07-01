@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -60,4 +62,30 @@ public class UserService implements UserDetailsService {
         return JwtEntityFactory.create(currentUser);
     }
 
+    @Transactional(readOnly = true)
+    public List<User> getAll() {
+        List<User> allUsers = userRepository.findAll();
+        if (allUsers.isEmpty()){
+            throw new ResourceNotFoundException("There are doesn't have users in the db");
+        }
+        return allUsers;
+    }
+
+    @Transactional
+    public void deleteUser(Long userId) {
+        User currentUser = userRepository.findUserById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        userRepository.deleteById(currentUser.getId());
+    }
+
+    @Transactional
+    public User update(Long userId, User user) {
+        User currentUser = getById(userId);
+        currentUser.setName(user.getName());
+        currentUser.setPhoneNumber(user.getPhoneNumber());
+        currentUser.setRole(user.getRole());
+        currentUser.setEmail(user.getEmail());
+        currentUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(currentUser);
+    }
 }

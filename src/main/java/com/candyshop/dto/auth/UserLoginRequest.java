@@ -8,8 +8,10 @@ import lombok.Data;
 @Schema(description = "Data for login request")
 public class UserLoginRequest {
 
+    @Schema(description = "User email", example = "petrov@gmail.com")
     @NotNull(message = "Email must be not null")
     private String email;
 
+    @Schema(description = "User password", example = "11petr11")
     private String password;
 }

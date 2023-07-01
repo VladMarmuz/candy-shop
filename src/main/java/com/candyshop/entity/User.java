@@ -24,8 +24,6 @@ public class User {
 
     private String name;
 
-    /*@Pattern(regexp = "^(\\+375|80)(29|25|44|33)(\\d{3})(\\d{2})(\\d{2})$",
-            message = "The phone should be like example")*/
     @Column(name = "phone_number")
     private String phoneNumber;
 
@@ -42,7 +40,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Order> orders;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "basket_id")
     private Basket basket;
 

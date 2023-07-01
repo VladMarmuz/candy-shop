@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS users
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     enabled BOOLEAN,
-    basket_id BIGINT REFERENCES baskets (basket_id),
+    basket_id BIGINT REFERENCES baskets (basket_id) ON DELETE CASCADE,
     role VARCHAR(255) NOT NULL
     );
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS orders
     order_id    SERIAL PRIMARY KEY,
     date        DATE NOT NULL ,
     address     VARCHAR(255) NOT NULL ,
-    priceResult DECIMAL(10, 2) NOT NULL ,
+    price_result DECIMAL(10, 2) NOT NULL ,
     status      VARCHAR(255) NOT NULL,
     user_id INT REFERENCES users (user_id) ON DELETE CASCADE
     );

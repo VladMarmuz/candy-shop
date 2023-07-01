@@ -1,4 +1,4 @@
-package com.candyshop.dto.auth;
+package com.candyshop.dto;
 
 import com.candyshop.validation.OnCreate;
 import com.candyshop.validation.OnUpdate;
@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.Length;
 
 @Data
 @Schema(description = "User DTO")
-public class UserRegistrationRequest {
+public class UserDTO {
 
     @Schema(description = "User id", example = "1")
     private Long id;

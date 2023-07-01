@@ -26,6 +26,7 @@ public class Order {
 
     private String address;
 
+    @Column(name = "price_result")
     private BigDecimal priceResult;
 
     @Enumerated(EnumType.STRING)
