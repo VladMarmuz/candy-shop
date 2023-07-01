@@ -1,9 +1,11 @@
 package com.candyshop.service;
 
 import com.candyshop.auth.JwtEntityFactory;
+import com.candyshop.entity.Basket;
 import com.candyshop.entity.User;
 import com.candyshop.entity.enums.Role;
 import com.candyshop.exception.ResourceNotFoundException;
+import com.candyshop.repository.BasketRepository;
 import com.candyshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final BasketRepository basketRepository;
 
 
     @Transactional(readOnly = true)
@@ -51,9 +54,18 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.ROLE_USER);
         user.setEnabled(false);
-        userRepository.save(user);
 
+        Basket createdBasket = createBasket(user);
+
+        user.setBasket(createdBasket);
+        userRepository.save(user);
         return user;
+    }
+
+    Basket createBasket(User user) {
+        Basket basket = new Basket();
+        basket.setUser(user);
+        return basketRepository.save(basket);
     }
 
     @Override
