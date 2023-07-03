@@ -1,6 +1,6 @@
 package com.candyshop.controller;
 
-import com.candyshop.dto.UserDTO;
+import com.candyshop.dto.UserDto;
 import com.candyshop.dto.UserUpdateRequest;
 import com.candyshop.entity.User;
 import com.candyshop.mappers.UserMapper;
@@ -26,14 +26,14 @@ public class UserController {
 
     @GetMapping("/{userId}")
     @Operation(summary = "Method for find one user by userId")
-    public UserDTO getUser(@PathVariable Long userId) {
+    public UserDto getUser(@PathVariable Long userId) {
         User currentUser = userService.getById(userId);
         return userMapper.toDto(currentUser);
     }
 
     @GetMapping("/")
     @Operation(summary = "Get all users")
-    public List<UserDTO> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         List<User> currentUsers = userService.getAll();
         return currentUsers.stream()
                 .map(userMapper::toDto)
@@ -41,18 +41,17 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public void deleteUserByUserId(@PathVariable Long userId) {
+    public String deleteUserByUserId(@PathVariable Long userId) {
         userService.deleteUser(userId);
+        return "User successfully deleted";
     }
 
     @PutMapping("/{userId}")
     @Operation(summary = "Update User")
-    public UserDTO update(@PathVariable Long userId,
+    public UserDto update(@PathVariable Long userId,
                           @Validated @RequestBody UserUpdateRequest updateRequest) {
         User user = requestMapper.toEntity(updateRequest);
         User updatedUser = userService.update(userId, user);
         return userMapper.toDto(updatedUser);
     }
-
-
 }

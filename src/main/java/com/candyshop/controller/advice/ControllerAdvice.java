@@ -21,38 +21,38 @@ public class ControllerAdvice {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionBody handleResourceNotFound(ResourceNotFoundException e){
+    public ExceptionBody handleResourceNotFound(ResourceNotFoundException e) {
         return new ExceptionBody(e.getMessage());
     }
 
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleAuthentication(AuthenticationException e){
+    public ExceptionBody handleAuthentication(AuthenticationException e) {
         return new ExceptionBody("Authentication failed.");
     }
 
     @ExceptionHandler(ResourceMappingException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ExceptionBody handleResourceMapping(ResourceMappingException e){
+    public ExceptionBody handleResourceMapping(ResourceMappingException e) {
         return new ExceptionBody(e.getMessage());
     }
 
     @ExceptionHandler(IllegalStateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleIllegalState(IllegalStateException e){
+    public ExceptionBody handleIllegalState(IllegalStateException e) {
         return new ExceptionBody(e.getMessage());
     }
 
     @ExceptionHandler({AccessDeniedException.class,
             org.springframework.security.access.AccessDeniedException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleAccessDenied(){
+    public ExceptionBody handleAccessDenied() {
         return new ExceptionBody("Access. denied");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleArgumentNotValid(MethodArgumentNotValidException e){
+    public ExceptionBody handleArgumentNotValid(MethodArgumentNotValidException e) {
         ExceptionBody eBody = new ExceptionBody("Validation failed");
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
         eBody.setErrors(fieldErrors.stream()
@@ -62,7 +62,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleConstraintViolation(ConstraintViolationException e){
+    public ExceptionBody handleConstraintViolation(ConstraintViolationException e) {
         ExceptionBody eBody = new ExceptionBody("Validation failed");
         eBody.setErrors(e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
@@ -74,7 +74,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ExceptionBody handleOtherExceptions(Exception e){
-        return new ExceptionBody("Try later. Problems on the server");
+    public ExceptionBody handleOtherExceptions(Exception e) {
+        return new ExceptionBody("Try later. Problems on the server : "+ e.getMessage());
     }
 }

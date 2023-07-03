@@ -11,7 +11,7 @@ import org.hibernate.validator.constraints.Length;
 
 @Data
 @Schema(description = "User DTO")
-public class UserDTO {
+public class UserDto {
 
     @Schema(description = "User id", example = "1")
     private Long id;

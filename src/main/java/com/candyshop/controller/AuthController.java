@@ -1,9 +1,9 @@
 package com.candyshop.controller;
 
+import com.candyshop.dto.UserDto;
 import com.candyshop.dto.auth.RefreshToken;
 import com.candyshop.dto.auth.UserLoginRequest;
 import com.candyshop.dto.auth.UserLoginResponse;
-import com.candyshop.dto.UserDTO;
 import com.candyshop.entity.User;
 import com.candyshop.mappers.UserMapper;
 import com.candyshop.service.AuthService;
@@ -36,7 +36,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Method for registration user")
-    public UserDTO register(@Validated @RequestBody UserDTO userDTO) {
+    public UserDto register(@Validated @RequestBody UserDto userDTO) {
         User user = userMapper.toEntity(userDTO);
         User createdUser = userService.create(user);
         return userMapper.toDto(createdUser);

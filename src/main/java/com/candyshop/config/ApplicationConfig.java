@@ -85,6 +85,7 @@ public class ApplicationConfig {
                 .requestMatchers("/api/v1/auth/**").permitAll()
                 .requestMatchers("/swagger-ui/**").permitAll()
                 .requestMatchers("/v3/api-docs/**").permitAll()
+                .requestMatchers("/api/v1/products/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .anonymous().disable()
