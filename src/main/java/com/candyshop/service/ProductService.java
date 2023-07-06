@@ -45,6 +45,7 @@ public class ProductService {
         productRepository.deleteById(productId);
     }
 
+    @Transactional
     public Product updateProduct(Product product) {
         Product foundProduct = getProduct(product.getId());
         foundProduct.setName(product.getName());

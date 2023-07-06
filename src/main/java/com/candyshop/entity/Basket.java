@@ -3,6 +3,7 @@ package com.candyshop.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -19,11 +20,14 @@ public class Basket {
     @Column(name = "basket_id")
     private Long id;
 
-    @ManyToMany
+    @Column(name = "price_result")
+    private BigDecimal priceResult;
+
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "basket_product",
             joinColumns = @JoinColumn(name = "basket_id"),
             inverseJoinColumns = @JoinColumn(name = "product_id"))
-    private List<Product> products;
+    private List<ProductIntoBasket> products;
 
     @OneToOne(mappedBy = "basket")
     private User user;

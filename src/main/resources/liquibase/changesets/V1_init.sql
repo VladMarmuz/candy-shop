@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS baskets
 (
-    basket_id SERIAL PRIMARY KEY
+    basket_id SERIAL PRIMARY KEY,
+    price_result DECIMAL(10, 2)
 );
 
 CREATE TABLE IF NOT EXISTS users
@@ -22,6 +23,15 @@ CREATE TABLE IF NOT EXISTS products
     description VARCHAR(255) NOT NULL ,
     price       DECIMAL(10, 2) NOT NULL ,
     balance     VARCHAR(255) NOT NULL
+    );
+
+CREATE TABLE IF NOT EXISTS products_into_basket
+(
+    product_id  SERIAL PRIMARY KEY,
+    name        VARCHAR(255) NOT NULL ,
+    price       DECIMAL(10, 2) NOT NULL ,
+    final_price       DECIMAL(10, 2) NOT NULL ,
+    number_into_basket INTEGER NOT NULL
     );
 
 CREATE TABLE IF NOT EXISTS images
@@ -46,13 +56,13 @@ CREATE TABLE IF NOT EXISTS orders
 CREATE TABLE IF NOT EXISTS order_product
 (
     order_id   BIGINT REFERENCES orders (order_id) ON DELETE CASCADE ON UPDATE NO ACTION ,
-    product_id BIGINT REFERENCES products (product_id) ON DELETE CASCADE ON UPDATE NO ACTION ,
+    product_id BIGINT REFERENCES products_into_basket (product_id) ON DELETE CASCADE ON UPDATE NO ACTION ,
     PRIMARY KEY (order_id, product_id)
     );
 
 CREATE TABLE IF NOT EXISTS basket_product
 (
     basket_id  BIGINT REFERENCES baskets (basket_id)  ON DELETE CASCADE ON UPDATE NO ACTION ,
-    product_id BIGINT REFERENCES products (product_id) ON DELETE CASCADE ON UPDATE NO ACTION ,
+    product_id BIGINT REFERENCES products_into_basket (product_id) ON DELETE CASCADE ON UPDATE NO ACTION ,
     PRIMARY KEY (basket_id, product_id)
 )
