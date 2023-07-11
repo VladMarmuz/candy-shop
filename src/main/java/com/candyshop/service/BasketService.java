@@ -28,7 +28,8 @@ public class BasketService {
 
     @Transactional(readOnly = true)
     public Basket getBasketByUserId(Long userId) {
-        return basketRepository.findBasketByUserId(userId);
+        Basket currentBasket = basketRepository.findBasketByUserId(userId);
+        return currentBasket;
     }
 
     @Transactional

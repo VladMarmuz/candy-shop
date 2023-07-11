@@ -87,6 +87,7 @@ public class ApplicationConfig {
                 .requestMatchers("/v3/api-docs/**").permitAll()
                 .requestMatchers("/api/v1/basket/**").permitAll()
                 .requestMatchers("/api/v1/products/**").permitAll()
+                .requestMatchers("/api/v1/orders/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .anonymous().disable()
