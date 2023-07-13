@@ -3,6 +3,7 @@ package com.candyshop.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
@@ -14,7 +15,7 @@ import java.util.Objects;
 @Builder
 @NoArgsConstructor
 @Table(name = "products_into_basket")
-public class ProductIntoBasket {
+public class ProductIntoBasket implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
