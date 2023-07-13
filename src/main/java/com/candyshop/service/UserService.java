@@ -9,6 +9,10 @@ import com.candyshop.repository.BasketRepository;
 import com.candyshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,6 +33,7 @@ public class UserService implements UserDetailsService {
 
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "UserService::getById", key = "#userId")
     public User getById(Long userId) {
         log.info("*** Request to get a user by ID ***");
         User currentUser = userRepository.findUserById(userId)
@@ -38,6 +43,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "UserService:getByEmail", key = "#email")
     public User getByEmail(String email) {
         log.info("*** Request to get a user by email ***");
         User currentUser = userRepository.findUserByEmail(email)
@@ -47,6 +53,10 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    @Caching(cacheable = {
+            @Cacheable(value = "UserService::getById", key = "#user.id"),
+            @Cacheable(value = "UserService::getByEmail", key = "#user.email")
+    })
     public User create(User user) {
         if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
             throw new IllegalStateException("User already exists.");
@@ -84,6 +94,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    @CacheEvict(value = "UserService::getById", key = "#userId")
     public void deleteUser(Long userId) {
         User currentUser = userRepository.findUserById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
@@ -91,6 +102,10 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
+    @Caching(put = {
+            @CachePut(value = "UserService::getById", key = "#userId"),
+            @CachePut(value = "UserService::getByEmail", key = "#user.email"),
+    })
     public User update(Long userId, User user) {
         User currentUser = getById(userId);
         currentUser.setName(user.getName());
