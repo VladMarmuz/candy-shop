@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/basket")
+@RequestMapping("/api/v1/baskets")
 @Tag(name = "Basket Controller", description = "Basket API")
 public class BasketController {
 

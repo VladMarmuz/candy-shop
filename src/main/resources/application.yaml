@@ -6,11 +6,10 @@ spring:
     cache-names: redis-cache
   data:
     redis:
-      host: ${REDIS_HOST}
+      host: localhost
       port: 6379
-      password: ${REDIS_PASSWORD}
   datasource:
-    url: jdbc:postgresql://${HOST}:5432/${POSTGRES_DATABASE}?currentSchema=${POSTGRES_SCHEMA}
+    url: jdbc:postgresql://localhost:5432/${POSTGRES_DATABASE}?currentSchema=${POSTGRES_SCHEMA}
     password: ${POSTGRES_PASSWORD}
     username: ${POSTGRES_USERNAME}
     driver-class-name: org.postgresql.Driver
