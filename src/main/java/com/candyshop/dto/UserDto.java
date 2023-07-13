@@ -14,6 +14,7 @@ import org.hibernate.validator.constraints.Length;
 public class UserDto {
 
     @Schema(description = "User id", example = "1")
+    @NotNull(message = "Id must be not null", groups = OnUpdate.class)
     private Long id;
 
     @Schema(description = "User name", example = "Egor Petrov")

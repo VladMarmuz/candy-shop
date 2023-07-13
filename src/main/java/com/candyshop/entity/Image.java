@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @Table(name = "images")
-public class Image {
+public class Image  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
