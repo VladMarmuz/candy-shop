@@ -1,6 +1,7 @@
 package com.candyshop.service;
 
 import com.candyshop.entity.Product;
+import com.candyshop.entity.ProductImage;
 import com.candyshop.entity.enums.Balance;
 import com.candyshop.exception.ResourceNotFoundException;
 import com.candyshop.repository.ProductRepository;
@@ -9,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +21,7 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ImageService imageService;
 
     @Transactional(readOnly = true)
     @Cacheable(value = "ProductService::getProduct", key = "#id")
@@ -61,5 +62,14 @@ public class ProductService {
         foundProduct.setPrice(product.getPrice());
         foundProduct.setDescription(product.getDescription());
         return productRepository.save(foundProduct);
+    }
+
+    @Transactional
+    @CacheEvict(value = "ProductService::getProduct", key = "#id")
+    public void uploadImage(Long id, ProductImage image) {
+        Product product = getProduct(id);
+        String fileName = imageService.upload(image);
+        product.getImages().add(fileName);
+        productRepository.save(product);
     }
 }

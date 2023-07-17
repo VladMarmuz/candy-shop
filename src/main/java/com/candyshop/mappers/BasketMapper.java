@@ -6,9 +6,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface BasketMapper {
-
-    Basket toEntity(BasketDto basketDto);
-    BasketDto toDto(Basket basket);
+public interface BasketMapper extends Mappable<Basket, BasketDto> {
 
 }

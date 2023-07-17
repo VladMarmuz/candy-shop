@@ -1,11 +1,13 @@
 package com.candyshop.dto;
 
 import com.candyshop.entity.enums.Balance;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 @Schema(description = "Product create DTO")
@@ -28,4 +30,7 @@ public class ProductDto {
 
     @Schema(description = "Balance field", example = "IN_STOCK")
     private Balance balance;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private List<String> images;
 }

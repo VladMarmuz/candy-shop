@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -31,18 +32,20 @@ public class Product implements Serializable {
     @Enumerated(EnumType.STRING)
     private Balance balance;
 
-    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    private Image image;
+    @Column(name = "image")
+    @CollectionTable(name = "products_images")
+    @ElementCollection
+    private List<String> images;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Product product)) return false;
-        return Objects.equals(getId(), product.getId()) && Objects.equals(getName(), product.getName()) && Objects.equals(getDescription(), product.getDescription()) && Objects.equals(getPrice(), product.getPrice()) && getBalance() == product.getBalance() && Objects.equals(getImage(), product.getImage());
+        return Objects.equals(getId(), product.getId()) && Objects.equals(getName(), product.getName()) && Objects.equals(getDescription(), product.getDescription()) && Objects.equals(getPrice(), product.getPrice()) && getBalance() == product.getBalance();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getDescription(), getPrice(), getBalance(), getImage());
+        return Objects.hash(getId(), getName(), getDescription(), getPrice(), getBalance());
     }
 }

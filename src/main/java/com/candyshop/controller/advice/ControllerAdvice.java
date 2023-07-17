@@ -1,9 +1,6 @@
 package com.candyshop.controller.advice;
 
-import com.candyshop.exception.AccessDeniedException;
-import com.candyshop.exception.ExceptionBody;
-import com.candyshop.exception.ResourceMappingException;
-import com.candyshop.exception.ResourceNotFoundException;
+import com.candyshop.exception.*;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -70,6 +67,12 @@ public class ControllerAdvice {
                         violation -> violation.getMessage()
                 )));
         return eBody;
+    }
+
+    @ExceptionHandler(ImageUploadException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ExceptionBody handleImageUpload(ImageUploadException e){
+        return new ExceptionBody(e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

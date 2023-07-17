@@ -9,8 +9,6 @@ import com.candyshop.repository.BasketRepository;
 import com.candyshop.repository.ProductIntoBasketRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,13 +27,11 @@ public class BasketService {
     private final ProductIntoBasketRepository productIntoBasketRepository;
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "BasketService::getBasketByUserId", key = "#userId")
     public Basket getBasketByUserId(Long userId) {
         return basketRepository.findBasketByUserId(userId);
     }
 
     @Transactional
-    @Cacheable(value = "BasketService::getBasketByUserId", key = "#productIntoBasketDto.userId")
     public void addProduct(ProductIntoBasketDto productIntoBasketDto) {
         Basket currentBasket = getBasketByUserId(productIntoBasketDto.getUserId());
         Product currentProduct = productService.getProduct(productIntoBasketDto.getProductId());
@@ -86,14 +82,8 @@ public class BasketService {
         if (productIntoBasket.isPresent()) {
             Basket basket = basketRepository.findBasketByProductId(productId);
             basket.setPriceResult(basket.getPriceResult().subtract(productIntoBasket.get().getFinalPrice()));
-            evictCache(basket.getId());
         }
         productIntoBasketRepository.deleteProductIntoBasketById(productId);
-    }
-
-    @CacheEvict(value = "BasketService::getBasketByUserId", key = "#userId")
-    public void evictCache(Long userId) {
-        //this method is needed for caching after deletion
     }
 
     @Transactional
