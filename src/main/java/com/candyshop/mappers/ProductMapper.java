@@ -5,12 +5,6 @@ import com.candyshop.entity.Product;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface ProductMapper {
-
-    Product toEntity(ProductDto productDto);
-
-    ProductDto toDto(Product product);
-
-
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+public interface ProductMapper extends Mappable<Product, ProductDto> {
 }

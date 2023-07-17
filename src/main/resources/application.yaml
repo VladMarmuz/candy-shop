@@ -6,10 +6,10 @@ spring:
     cache-names: redis-cache
   data:
     redis:
-      host: localhost
+      host: ${REDIS_HOST}
       port: 6379
   datasource:
-    url: jdbc:postgresql://localhost:5432/${POSTGRES_DATABASE}?currentSchema=${POSTGRES_SCHEMA}
+    url: jdbc:postgresql://${HOST}:5432/${POSTGRES_DATABASE}?currentSchema=${POSTGRES_SCHEMA}
     password: ${POSTGRES_PASSWORD}
     username: ${POSTGRES_USERNAME}
     driver-class-name: org.postgresql.Driver
@@ -24,3 +24,9 @@ security:
     refresh: 30
 springdoc:
   override-with-generic-response: false
+
+minio:
+  bucket: ${MINIO_BUCKET}
+  url: ${MINIO_URL}
+  accessKey: ${MINIO_ACCESS_KEY}
+  secretKey: ${MINIO_SECRET_KEY}

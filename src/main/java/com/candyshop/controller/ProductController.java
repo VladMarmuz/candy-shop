@@ -1,7 +1,10 @@
 package com.candyshop.controller;
 
 import com.candyshop.dto.ProductDto;
+import com.candyshop.dto.ProductImageDto;
 import com.candyshop.entity.Product;
+import com.candyshop.entity.ProductImage;
+import com.candyshop.mappers.ProductImageMapper;
 import com.candyshop.mappers.ProductMapper;
 import com.candyshop.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,6 +25,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final ProductMapper productMapper;
+    private final ProductImageMapper productImageMapper;
 
     @GetMapping("/{id}")
     @Operation(summary = "Get product by productId")
@@ -60,5 +64,13 @@ public class ProductController {
         Product product = productMapper.toEntity(productDto);
         Product currentProduct = productService.updateProduct(product);
         return productMapper.toDto(currentProduct);
+    }
+
+    @PostMapping("/{id}/image")
+    @Operation(summary = "Upload image to product")
+    public void uploadImage(@PathVariable Long id,
+                            @Validated @ModelAttribute ProductImageDto productImage){
+        ProductImage image = productImageMapper.toEntity(productImage);
+        productService.uploadImage(id, image);
     }
 }

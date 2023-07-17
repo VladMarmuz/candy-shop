@@ -43,14 +43,6 @@ CREATE TABLE IF NOT EXISTS products_order
     number_into_basket INTEGER NOT NULL
     );
 
-CREATE TABLE IF NOT EXISTS images
-(
-    image_id   SERIAL PRIMARY KEY,
-    name       VARCHAR(255) UNIQUE NOT NULL,
-    type       VARCHAR(255) NOT NULL ,
-    link       VARCHAR(255) NOT NULL ,
-    product_id BIGINT REFERENCES products (product_id)
-    );
 
 CREATE TABLE IF NOT EXISTS orders
 (
@@ -74,4 +66,10 @@ CREATE TABLE IF NOT EXISTS basket_product
     basket_id  BIGINT REFERENCES baskets (basket_id)  ON DELETE CASCADE ON UPDATE NO ACTION ,
     product_id BIGINT REFERENCES products_into_basket (product_id) ON DELETE CASCADE ON UPDATE NO ACTION ,
     PRIMARY KEY (basket_id, product_id)
-)
+);
+
+CREATE TABLE IF NOT EXISTS products_images
+(
+    product_id BIGINT REFERENCES products (product_id) ON DELETE CASCADE ON UPDATE NO ACTION ,
+    image VARCHAR(255) NOT NULL
+);
