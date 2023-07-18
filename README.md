@@ -46,4 +46,4 @@ To run this application you need to create `.env` file in root directory with ne
 https://hub.docker.com/repository/docker/vladmarmuz/candy-shop/general
 
 To download the image from dockerhub you need to run the following command
-###  docker pull vladmarmuz/candy-shop
+###  docker pull vladmarmuz/candy-shop:latest
