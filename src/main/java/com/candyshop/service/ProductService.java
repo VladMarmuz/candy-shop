@@ -25,14 +25,15 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     @Cacheable(value = "ProductService::getProduct", key = "#id")
-    public Product getProduct(Long id) {
+    public Product getProduct(final Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Product not found"));
     }
 
     @Transactional
     @Cacheable(value = "ProductService::getProduct", key = "#product.id")
-    public Product create(Product product) {
+    public Product create(final Product product) {
         product.setBalance(Balance.IN_STOCK);
         return productRepository.save(product);
     }
@@ -41,21 +42,22 @@ public class ProductService {
     public List<Product> getAll() {
         List<Product> allProducts = productRepository.findAll();
         if (allProducts.isEmpty()) {
-            throw new ResourceNotFoundException("There are doesn't have product in the db");
+            throw new ResourceNotFoundException(
+                    "There are doesn't have product in the db");
         }
         return allProducts;
     }
 
     @Transactional
     @CacheEvict(value = "ProductService::getProduct", key = "#productId")
-    public void deleteProduct(Long productId) {
+    public void deleteProduct(final Long productId) {
         getProduct(productId);
         productRepository.deleteById(productId);
     }
 
     @Transactional
     @CachePut(value = "ProductService::getProduct", key = "#product.id")
-    public Product updateProduct(Product product) {
+    public Product updateProduct(final Product product) {
         Product foundProduct = getProduct(product.getId());
         foundProduct.setName(product.getName());
         foundProduct.setBalance(product.getBalance());
@@ -66,7 +68,7 @@ public class ProductService {
 
     @Transactional
     @CacheEvict(value = "ProductService::getProduct", key = "#id")
-    public void uploadImage(Long id, ProductImage image) {
+    public void uploadImage(final Long id, final ProductImage image) {
         Product product = getProduct(id);
         String fileName = imageService.upload(image);
         product.getImages().add(fileName);

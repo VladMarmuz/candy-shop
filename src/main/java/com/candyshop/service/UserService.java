@@ -34,21 +34,19 @@ public class UserService implements UserDetailsService {
 
     @Transactional(readOnly = true)
     @Cacheable(value = "UserService::getById", key = "#userId")
-    public User getById(Long userId) {
-        log.info("*** Request to get a user by ID ***");
+    public User getById(final Long userId) {
         User currentUser = userRepository.findUserById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        log.info("*** User successfully found by ID ***");
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User not found"));
         return currentUser;
     }
 
     @Transactional(readOnly = true)
     @Cacheable(value = "UserService:getByEmail", key = "#email")
-    public User getByEmail(String email) {
-        log.info("*** Request to get a user by email ***");
+    public User getByEmail(final String email) {
         User currentUser = userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        log.info("*** User successfully found by email ***");
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User not found"));
         return currentUser;
     }
 
@@ -57,7 +55,7 @@ public class UserService implements UserDetailsService {
             @Cacheable(value = "UserService::getById", key = "#user.id"),
             @Cacheable(value = "UserService::getByEmail", key = "#user.email")
     })
-    public User create(User user) {
+    public User create(final User user) {
         if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
             throw new IllegalStateException("User already exists.");
         }
@@ -72,14 +70,15 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    Basket createBasket(User user) {
+    Basket createBasket(final User user) {
         Basket basket = new Basket();
         basket.setUser(user);
         return basketRepository.save(basket);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String email)
+            throws UsernameNotFoundException {
         User currentUser = getByEmail(email);
         return JwtEntityFactory.create(currentUser);
     }
@@ -88,16 +87,18 @@ public class UserService implements UserDetailsService {
     public List<User> getAll() {
         List<User> allUsers = userRepository.findAll();
         if (allUsers.isEmpty()) {
-            throw new ResourceNotFoundException("There are doesn't have users in the db");
+            throw new ResourceNotFoundException(
+                    "There are doesn't have users in the db");
         }
         return allUsers;
     }
 
     @Transactional
     @CacheEvict(value = "UserService::getById", key = "#userId")
-    public void deleteUser(Long userId) {
+    public void deleteUser(final Long userId) {
         User currentUser = userRepository.findUserById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User not found"));
         userRepository.deleteById(currentUser.getId());
     }
 
@@ -106,7 +107,7 @@ public class UserService implements UserDetailsService {
             @CachePut(value = "UserService::getById", key = "#userId"),
             @CachePut(value = "UserService::getByEmail", key = "#user.email"),
     })
-    public User update(Long userId, User user) {
+    public User update(final Long userId, final User user) {
         User currentUser = getById(userId);
         currentUser.setName(user.getName());
         currentUser.setPhoneNumber(user.getPhoneNumber());

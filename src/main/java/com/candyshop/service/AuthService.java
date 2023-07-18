@@ -17,18 +17,22 @@ public class AuthService {
     private final JwtTokenManager jwtTokenManager;
     private final AuthenticationManager authenticationManager;
 
-    public UserLoginResponse login(UserLoginRequest loginRequest) {
+    public UserLoginResponse login(final UserLoginRequest loginRequest) {
         User currentUser = userService.getByEmail(loginRequest.getEmail());
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getEmail(),
+                        loginRequest.getPassword()));
         return getLoginResponse(currentUser);
     }
 
-    public UserLoginResponse refresh(RefreshToken refreshToken) {
-        return jwtTokenManager.refreshUserTokens(refreshToken.getRefreshToken(), refreshToken.getUserId());
+    public UserLoginResponse refresh(final RefreshToken refreshToken) {
+        return jwtTokenManager.refreshUserTokens(
+                refreshToken.getRefreshToken(),
+                refreshToken.getUserId());
     }
 
-    private UserLoginResponse getLoginResponse(User currentUser) {
+    private UserLoginResponse getLoginResponse(final User currentUser) {
         UserLoginResponse loginResponse = new UserLoginResponse();
         loginResponse.setUserId(currentUser.getId());
         loginResponse.setName(currentUser.getName());

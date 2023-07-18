@@ -32,20 +32,24 @@ public class AuthController {
     private final UserMapper userMapper;
 
     @PostMapping("/login")
-    public UserLoginResponse login(@Validated @RequestBody UserLoginRequest loginRequest) {
+    public UserLoginResponse login(
+            @Validated @RequestBody final UserLoginRequest loginRequest) {
+
         return authService.login(loginRequest);
     }
 
     @PostMapping("/register")
     @Operation(summary = "Method for registration user")
-    public UserDto register(@Validated(OnCreate.class) @RequestBody UserDto userDTO) {
+    public UserDto register(@Validated(OnCreate.class)
+                            @RequestBody final UserDto userDTO) {
         User user = userMapper.toEntity(userDTO);
         User createdUser = userService.create(user);
         return userMapper.toDto(createdUser);
     }
 
     @PostMapping("/refresh")
-    public UserLoginResponse refresh(@RequestBody RefreshToken refreshToken) {
+    public UserLoginResponse refresh(@RequestBody
+                                         final RefreshToken refreshToken) {
         return authService.refresh(refreshToken);
     }
 }

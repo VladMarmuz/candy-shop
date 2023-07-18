@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class JwtEntityFactory {
 
-    public static JwtEntity create(User user) {
+    public static JwtEntity create(final User user) {
 
         return new JwtEntity(
                 user.getId(),
@@ -19,11 +19,14 @@ public class JwtEntityFactory {
                 user.getEmail(),
                 user.getPassword(),
                 user.isEnabled(),
-                mapToGrantedAuthorities(new ArrayList<>(user.getRole().ordinal()))
+                mapToGrantedAuthorities(new ArrayList<>(
+                            user.getRole()
+                                .ordinal()))
         );
     }
 
-    private static List<GrantedAuthority> mapToGrantedAuthorities(ArrayList<Role> roles) {
+    private static List<GrantedAuthority> mapToGrantedAuthorities(
+            final List<Role> roles) {
         return roles.stream()
                 .map(Enum::name)
                 .map(SimpleGrantedAuthority::new)

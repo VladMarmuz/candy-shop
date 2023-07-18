@@ -10,14 +10,15 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ProductIntoBasketRepository extends JpaRepository<ProductIntoBasket, Long> {
+public interface ProductIntoBasketRepository
+        extends JpaRepository<ProductIntoBasket, Long> {
 
     void deleteProductIntoBasketById(Long productId);
 
     Optional<ProductIntoBasket> findProductIntoBasketByName(String name);
 
     @Modifying
-    @Query(value = """ 
+    @Query(value = """
             DELETE
             FROM products_into_basket
             WHERE product_id IN(SELECT product_id
@@ -26,5 +27,4 @@ public interface ProductIntoBasketRepository extends JpaRepository<ProductIntoBa
             """,
             nativeQuery = true)
     void deleteAllProductFromBasket(@Param("basketId") Long basketId);
-
 }

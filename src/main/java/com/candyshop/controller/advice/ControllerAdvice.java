@@ -1,6 +1,10 @@
 package com.candyshop.controller.advice;
 
-import com.candyshop.exception.*;
+import com.candyshop.exception.ImageUploadException;
+import com.candyshop.exception.AccessDeniedException;
+import com.candyshop.exception.ExceptionBody;
+import com.candyshop.exception.ResourceMappingException;
+import com.candyshop.exception.ResourceNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -18,25 +22,28 @@ public class ControllerAdvice {
 
     @ExceptionHandler(ResourceNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ExceptionBody handleResourceNotFound(ResourceNotFoundException e) {
+    public ExceptionBody handleResourceNotFound(
+            final ResourceNotFoundException e) {
         return new ExceptionBody(e.getMessage());
     }
 
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleAuthentication(AuthenticationException e) {
+    public ExceptionBody handleAuthentication(
+            final AuthenticationException e) {
         return new ExceptionBody("Authentication failed.");
     }
 
     @ExceptionHandler(ResourceMappingException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ExceptionBody handleResourceMapping(ResourceMappingException e) {
+    public ExceptionBody handleResourceMapping(
+            final ResourceMappingException e) {
         return new ExceptionBody(e.getMessage());
     }
 
     @ExceptionHandler(IllegalStateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleIllegalState(IllegalStateException e) {
+    public ExceptionBody handleIllegalState(final IllegalStateException e) {
         return new ExceptionBody(e.getMessage());
     }
 
@@ -49,17 +56,21 @@ public class ControllerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleArgumentNotValid(MethodArgumentNotValidException e) {
+    public ExceptionBody handleArgumentNotValid(
+            final MethodArgumentNotValidException e) {
         ExceptionBody eBody = new ExceptionBody("Validation failed");
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
         eBody.setErrors(fieldErrors.stream()
-                .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage)));
+                .collect(Collectors.toMap(
+                        FieldError::getField,
+                        FieldError::getDefaultMessage)));
         return eBody;
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleConstraintViolation(ConstraintViolationException e) {
+    public ExceptionBody handleConstraintViolation(
+            final ConstraintViolationException e) {
         ExceptionBody eBody = new ExceptionBody("Validation failed");
         eBody.setErrors(e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(
@@ -71,14 +82,15 @@ public class ControllerAdvice {
 
     @ExceptionHandler(ImageUploadException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleImageUpload(ImageUploadException e) {
+    public ExceptionBody handleImageUpload(final ImageUploadException e) {
         return new ExceptionBody(e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ExceptionBody handleOtherExceptions(Exception e) {
+    public ExceptionBody handleOtherExceptions(final Exception e) {
         e.printStackTrace();
-        return new ExceptionBody("Try later. Problems on the server : " + e.getMessage());
+        return new ExceptionBody(
+                "Try later. Problems on the server : " + e.getMessage());
     }
 }
