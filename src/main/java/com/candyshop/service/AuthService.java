@@ -24,7 +24,7 @@ public class AuthService {
         return getLoginResponse(currentUser);
     }
 
-    public UserLoginResponse refresh(RefreshToken refreshToken){
+    public UserLoginResponse refresh(RefreshToken refreshToken) {
         return jwtTokenManager.refreshUserTokens(refreshToken.getRefreshToken(), refreshToken.getUserId());
     }
 

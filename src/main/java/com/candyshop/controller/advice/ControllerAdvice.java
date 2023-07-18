@@ -71,7 +71,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(ImageUploadException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleImageUpload(ImageUploadException e){
+    public ExceptionBody handleImageUpload(ImageUploadException e) {
         return new ExceptionBody(e.getMessage());
     }
 
@@ -79,6 +79,6 @@ public class ControllerAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionBody handleOtherExceptions(Exception e) {
         e.printStackTrace();
-        return new ExceptionBody("Try later. Problems on the server : "+ e.getMessage());
+        return new ExceptionBody("Try later. Problems on the server : " + e.getMessage());
     }
 }

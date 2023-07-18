@@ -40,7 +40,7 @@ public class OrderService {
     @Cacheable(value = "OrderService::getOrdersByUserId", key = "#orderCreateDto.userId")
     public Order create(OrderCreateDto orderCreateDto) {
         Basket basket = basketService.getBasketByUserId(orderCreateDto.getUserId());
-        if(basket.getProducts().isEmpty()){
+        if (basket.getProducts().isEmpty()) {
             throw new ResourceNotFoundException("There are not products in the basket");
         }
         Order createdOrder = orderRepository.save(buildOrder(orderCreateDto, basket));
