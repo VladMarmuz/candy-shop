@@ -29,14 +29,14 @@ public class ProductController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get product by productId")
-    public ProductDto getProduct(@PathVariable Long id){
+    public ProductDto getProduct(@PathVariable Long id) {
         Product product = productService.getProduct(id);
         return productMapper.toDto(product);
     }
 
     @GetMapping("/")
     @Operation(summary = "Get all product")
-    public List<ProductDto> getAllProducts(){
+    public List<ProductDto> getAllProducts() {
         List<Product> currentUsers = productService.getAll();
         return currentUsers.stream()
                 .map(productMapper::toDto)
@@ -53,14 +53,14 @@ public class ProductController {
 
     @DeleteMapping("/{productId}")
     @Operation(summary = "Delete product")
-    public String delete(@PathVariable Long productId){
+    public String delete(@PathVariable Long productId) {
         productService.deleteProduct(productId);
         return "Product successfully deleted";
     }
 
     @PutMapping("/")
     @Operation(summary = "Update product")
-    public ProductDto update(@Validated @RequestBody ProductDto productDto){
+    public ProductDto update(@Validated @RequestBody ProductDto productDto) {
         Product product = productMapper.toEntity(productDto);
         Product currentProduct = productService.updateProduct(product);
         return productMapper.toDto(currentProduct);
@@ -69,7 +69,7 @@ public class ProductController {
     @PostMapping("/{id}/image")
     @Operation(summary = "Upload image to product")
     public void uploadImage(@PathVariable Long id,
-                            @Validated @ModelAttribute ProductImageDto productImage){
+                            @Validated @ModelAttribute ProductImageDto productImage) {
         ProductImage image = productImageMapper.toEntity(productImage);
         productService.uploadImage(id, image);
     }

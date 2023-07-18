@@ -51,10 +51,10 @@ public class BasketService {
             ProductIntoBasket productIntoBasketIfProductDoesntExistsIntoDb =
                     getProductIntoBasket(productIntoBasketDto, currentProduct);
             currentBasket.getProducts().add(productIntoBasketIfProductDoesntExistsIntoDb);
-            if(currentBasket.getPriceResult() != null) {
+            if (currentBasket.getPriceResult() != null) {
                 currentBasket.setPriceResult(currentBasket.getPriceResult()
                         .add(productIntoBasketIfProductDoesntExistsIntoDb.getFinalPrice()));
-            }else{
+            } else {
                 currentBasket.setPriceResult(productIntoBasketIfProductDoesntExistsIntoDb.getFinalPrice());
             }
         }

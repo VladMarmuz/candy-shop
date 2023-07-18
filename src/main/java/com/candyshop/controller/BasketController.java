@@ -21,28 +21,28 @@ public class BasketController {
 
     @GetMapping("/{userId}")
     @Operation(summary = "Get basket by UserID")
-    public BasketDto getBasket(@PathVariable Long userId){
+    public BasketDto getBasket(@PathVariable Long userId) {
         Basket currentBasket = basketService.getBasketByUserId(userId);
         return basketMapper.toDto(currentBasket);
     }
 
     @PostMapping("/")
     @Operation(summary = "Add product in the basket")
-    public String addProduct(@RequestBody ProductIntoBasketDto productIntoBasketDto){
+    public String addProduct(@RequestBody ProductIntoBasketDto productIntoBasketDto) {
         basketService.addProduct(productIntoBasketDto);
         return "Product successfully added in the basket";
     }
 
     @DeleteMapping("/{productIntoBasketId}")
     @Operation(summary = "Delete product from basket")
-    public String deleteProductFromBasket(@PathVariable Long productIntoBasketId){
+    public String deleteProductFromBasket(@PathVariable Long productIntoBasketId) {
         basketService.deleteProductFromBasket(productIntoBasketId);
         return "Product was successfully deleted";
     }
 
     @DeleteMapping("/all/{basketId}")
     @Operation(summary = "Delete all products from basket")
-    public String deleteAllProductFromBasket(@PathVariable Long basketId){
+    public String deleteAllProductFromBasket(@PathVariable Long basketId) {
         basketService.deleteAllProductFromBasket(basketId);
         return "Products were successfully deleted";
     }

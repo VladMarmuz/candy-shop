@@ -17,7 +17,7 @@ public interface ProductIntoBasketRepository extends JpaRepository<ProductIntoBa
     Optional<ProductIntoBasket> findProductIntoBasketByName(String name);
 
     @Modifying
-    @Query(value =""" 
+    @Query(value = """ 
             DELETE
             FROM products_into_basket
             WHERE product_id IN(SELECT product_id

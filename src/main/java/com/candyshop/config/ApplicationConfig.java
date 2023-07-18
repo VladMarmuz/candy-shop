@@ -43,7 +43,7 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public MinioClient minioClient(){
+    public MinioClient minioClient() {
         return MinioClient.builder()
                 .endpoint(minioProperties.getUrl())
                 .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())

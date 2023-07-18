@@ -32,14 +32,14 @@ public class OrderController {
 
     @PostMapping("/")
     @Operation(summary = "Create Order")
-    public OrderDto createOrder(@RequestBody OrderCreateDto orderCreateDto){
+    public OrderDto createOrder(@RequestBody OrderCreateDto orderCreateDto) {
         Order order = orderService.create(orderCreateDto);
         return orderMapper.toDto(order);
     }
 
     @DeleteMapping("/{orderId}")
     @Operation(summary = "Delete order")
-    public String deleteOrder(@PathVariable Long orderId){
+    public String deleteOrder(@PathVariable Long orderId) {
         orderService.delete(orderId);
         return "Order successfully deleted";
     }

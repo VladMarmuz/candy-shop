@@ -18,7 +18,7 @@ Main application communicates with cache (Redis), database (Postgresql), storage
 
 ![Class diagram](docs/class-diagram.png)
 
-I have some main classes - **User** , **Product** , **Basket** and **Order** 
+I have some main classes - **User** , **Product** , **Basket** and **Order**
 
 **User** class represents user in this application. User can login, registr, create and delete orders,
 add products in the basket.

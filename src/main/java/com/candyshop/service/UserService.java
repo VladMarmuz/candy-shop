@@ -87,7 +87,7 @@ public class UserService implements UserDetailsService {
     @Transactional(readOnly = true)
     public List<User> getAll() {
         List<User> allUsers = userRepository.findAll();
-        if (allUsers.isEmpty()){
+        if (allUsers.isEmpty()) {
             throw new ResourceNotFoundException("There are doesn't have users in the db");
         }
         return allUsers;
