@@ -13,7 +13,8 @@ public class BasketDto {
     @Schema(description = "Basket id", example = "1")
     private Long id;
 
-    @Schema(description = "Final price for all selected products", example = "44.50")
+    @Schema(description = "Final price for all selected products",
+            example = "44.50")
     private BigDecimal priceResult;
 
     private List<ProductIntoBasket> products;

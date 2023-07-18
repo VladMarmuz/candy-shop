@@ -20,7 +20,8 @@ public class ProductDto {
     @NotNull(message = "Name must be not null")
     private String name;
 
-    @Schema(description = "Product description", example = "Box for cakes 24x24x30")
+    @Schema(description = "Product description",
+            example = "Box for cakes 24x24x30")
     @NotNull(message = "Description must be not null")
     private String description;
 

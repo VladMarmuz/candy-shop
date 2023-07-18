@@ -37,7 +37,9 @@ public class JwtTokenManager {
         this.key = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes());
     }
 
-    public String createAccessToken(Long userId, String email, Role role) {
+    public String createAccessToken(final Long userId,
+                                    final String email,
+                                    final Role role) {
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("id", userId);
         claims.put("role", role);
@@ -50,7 +52,7 @@ public class JwtTokenManager {
                 .compact();
     }
 
-    public String createRefreshToken(Long userId, String email) {
+    public String createRefreshToken(final Long userId, final String email) {
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("id", userId);
         Instant validity = Instant.now()
@@ -62,7 +64,8 @@ public class JwtTokenManager {
                 .compact();
     }
 
-    public UserLoginResponse refreshUserTokens(String refreshToken, Long userId) {
+    public UserLoginResponse refreshUserTokens(final String refreshToken,
+                                               final Long userId) {
 
         if (!validateToken(refreshToken)) {
             throw new AccessDeniedException("Access denied");
@@ -74,7 +77,9 @@ public class JwtTokenManager {
 
     }
 
-    private static UserLoginResponse getLoginResponse(Long userId, User user, Token token) {
+    private static UserLoginResponse getLoginResponse(final Long userId,
+                                                      final User user,
+                                                      final Token token) {
         UserLoginResponse loginResponse = new UserLoginResponse();
         loginResponse.setUserId(userId);
         loginResponse.setName(user.getName());
@@ -82,7 +87,7 @@ public class JwtTokenManager {
         return loginResponse;
     }
 
-    public boolean validateToken(String token) {
+    public boolean validateToken(final String token) {
         Jws<Claims> claims = Jwts
                 .parserBuilder()
                 .setSigningKey(key)
@@ -92,23 +97,28 @@ public class JwtTokenManager {
         return !claims.getBody().getExpiration().before(new Date());
     }
 
-    public Authentication getAuthentication(String token) {
+    public Authentication getAuthentication(final String token) {
         String email = getEmail(token);
         UserDetails userDetails = userService.loadUserByUsername(email);
 
-        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(
+                userDetails, "",
+                userDetails.getAuthorities());
     }
 
-    private Token createTokenForResponse(Long userId, User user) {
+    private Token createTokenForResponse(final Long userId, final User user) {
         Token token = new Token();
-        token.setAccessToken(createAccessToken(userId, user.getEmail(), user.getRole()));
+        token.setAccessToken(createAccessToken(
+                userId,
+                user.getEmail(),
+                user.getRole()));
         token.setRefreshToken(createRefreshToken(userId, user.getEmail()));
         token.setExpirationIn(jwtProperties.getAccess());
 
         return token;
     }
 
-    public Token getToken(User user) {
+    public Token getToken(final User user) {
         Token token = new Token();
         token.setAccessToken(createAccessToken(
                 user.getId(),
@@ -121,7 +131,7 @@ public class JwtTokenManager {
         return token;
     }
 
-    private String getEmail(String token) {
+    private String getEmail(final String token) {
         return Jwts
                 .parserBuilder()
                 .setSigningKey(key)

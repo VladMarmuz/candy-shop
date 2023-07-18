@@ -13,7 +13,8 @@ public class OrderCreateDto {
     @Schema(description = "User id", example = "1")
     private Long userId;
 
-    @Schema(description = "Client address", example = "Soligorsk, Komsomola 33-32")
+    @Schema(description = "Client address",
+            example = "Soligorsk, Komsomola 33-32")
     @NotNull(message = "Address must be not null")
     private String address;
 

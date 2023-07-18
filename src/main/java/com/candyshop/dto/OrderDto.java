@@ -1,6 +1,5 @@
 package com.candyshop.dto;
 
-import com.candyshop.entity.ProductIntoBasket;
 import com.candyshop.entity.ProductOrder;
 import com.candyshop.entity.enums.Status;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -22,11 +22,12 @@ public class ImageService {
     private final MinioProperties minioProperties;
     private final MinioClient minioClient;
 
-    public String upload(ProductImage image) {
+    public String upload(final ProductImage image) {
         try {
             createBucket();
         } catch (Exception e) {
-            throw new ImageUploadException("Image upload failed " + e.getMessage());
+            throw new ImageUploadException(
+                    "Image upload failed " + e.getMessage());
         }
         MultipartFile file = image.getFile();
         if (file.isEmpty() || file.getOriginalFilename() == null) {
@@ -37,7 +38,8 @@ public class ImageService {
         try {
             inputStream = file.getInputStream();
         } catch (Exception e) {
-            throw new ImageUploadException("Image upload failed " + e.getMessage());
+            throw new ImageUploadException(
+                    "Image upload failed " + e.getMessage());
         }
         saveImage(inputStream, fileName);
         return fileName;
@@ -57,18 +59,20 @@ public class ImageService {
         }
     }
 
-    private String generateFileName(MultipartFile file) {
+    private String generateFileName(final MultipartFile file) {
         String extension = getExtension(file);
         return UUID.randomUUID() + "." + extension;
     }
 
-    private String getExtension(MultipartFile file) {
+    private String getExtension(final MultipartFile file) {
         return file.getOriginalFilename()
-                .substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+                .substring(file.getOriginalFilename().
+                        lastIndexOf(".") + 1);
     }
 
     @SneakyThrows
-    private void saveImage(InputStream inputStream, String fileName) {
+    private void saveImage(final InputStream inputStream,
+                           final String fileName) {
         minioClient.putObject(PutObjectArgs.builder()
                 .stream(inputStream, inputStream.available(), -1)
                 .bucket(minioProperties.getBucket())

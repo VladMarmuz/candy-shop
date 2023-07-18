@@ -16,9 +16,10 @@ public interface BasketRepository extends JpaRepository<Basket, Long> {
             SELECT b
             FROM Basket b
             WHERE b.id IN(SELECT b.id
-                          FROM ProductIntoBasket p 
-                          WHERE p.id = :productId )           
-            """)
+                          FROM ProductIntoBasket p
+                          WHERE p.id = :productId)
+                  """
+    )
     Basket findBasketByProductId(@Param("productId") Long productId);
 
 

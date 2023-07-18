@@ -1,8 +1,21 @@
 package com.candyshop.entity;
 
 import com.candyshop.entity.enums.Balance;
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -38,14 +51,23 @@ public class Product implements Serializable {
     private List<String> images;
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Product product)) return false;
-        return Objects.equals(getId(), product.getId()) && Objects.equals(getName(), product.getName()) && Objects.equals(getDescription(), product.getDescription()) && Objects.equals(getPrice(), product.getPrice()) && getBalance() == product.getBalance();
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Product product)) {
+            return false;
+        }
+        return Objects.equals(getId(), product.getId())
+                && Objects.equals(getName(), product.getName())
+                && Objects.equals(getDescription(), product.getDescription())
+                && Objects.equals(getPrice(), product.getPrice())
+                && getBalance() == product.getBalance();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getDescription(), getPrice(), getBalance());
+        return Objects.hash(
+                getId(), getName(), getDescription(), getPrice(), getBalance());
     }
 }

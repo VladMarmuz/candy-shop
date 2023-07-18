@@ -10,7 +10,13 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -26,7 +32,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     @Operation(summary = "Method for find one user by userId")
-    public UserDto getUser(@PathVariable Long userId) {
+    public UserDto getUser(@PathVariable final Long userId) {
         User currentUser = userService.getById(userId);
         return userMapper.toDto(currentUser);
     }
@@ -41,15 +47,16 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public String deleteUserByUserId(@PathVariable Long userId) {
+    public String deleteUserByUserId(@PathVariable final Long userId) {
         userService.deleteUser(userId);
         return "User successfully deleted";
     }
 
     @PutMapping("/{userId}")
     @Operation(summary = "Update User")
-    public UserDto update(@PathVariable Long userId,
-                          @Validated @RequestBody UserUpdateRequest updateRequest) {
+    public UserDto update(@PathVariable final Long userId,
+                          @Validated
+                          @RequestBody final UserUpdateRequest updateRequest) {
         User user = requestMapper.toEntity(updateRequest);
         User updatedUser = userService.update(userId, user);
         return userMapper.toDto(updatedUser);

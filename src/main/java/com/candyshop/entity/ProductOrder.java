@@ -1,7 +1,16 @@
 package com.candyshop.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -32,16 +41,27 @@ public class ProductOrder implements Serializable {
     private BigDecimal finalPrice;
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ProductOrder that)) return false;
-        return getNumberIntoBasket() == that.getNumberIntoBasket() && Objects.equals(getId(), that.getId())
-                && Objects.equals(getName(), that.getName()) && Objects.equals(getPrice(), that.getPrice())
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ProductOrder that)) {
+            return false;
+        }
+        return getNumberIntoBasket() == that.getNumberIntoBasket()
+                && Objects.equals(getId(), that.getId())
+                && Objects.equals(getName(), that.getName())
+                && Objects.equals(getPrice(), that.getPrice())
                 && Objects.equals(getFinalPrice(), that.getFinalPrice());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getPrice(), getNumberIntoBasket(), getFinalPrice());
+        return Objects.hash(
+                getId(),
+                getName(),
+                getPrice(),
+                getNumberIntoBasket(),
+                getFinalPrice());
     }
 }

@@ -12,7 +12,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -29,7 +37,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get product by productId")
-    public ProductDto getProduct(@PathVariable Long id) {
+    public ProductDto getProduct(@PathVariable final Long id) {
         Product product = productService.getProduct(id);
         return productMapper.toDto(product);
     }
@@ -45,7 +53,8 @@ public class ProductController {
 
     @PostMapping("/create")
     @Operation(summary = "Create product")
-    public ProductDto create(@Validated @RequestBody ProductDto productDto) {
+    public ProductDto create(@Validated
+                             @RequestBody final ProductDto productDto) {
         Product product = productMapper.toEntity(productDto);
         Product createdProduct = productService.create(product);
         return productMapper.toDto(createdProduct);
@@ -53,14 +62,15 @@ public class ProductController {
 
     @DeleteMapping("/{productId}")
     @Operation(summary = "Delete product")
-    public String delete(@PathVariable Long productId) {
+    public String delete(@PathVariable final Long productId) {
         productService.deleteProduct(productId);
         return "Product successfully deleted";
     }
 
     @PutMapping("/")
     @Operation(summary = "Update product")
-    public ProductDto update(@Validated @RequestBody ProductDto productDto) {
+    public ProductDto update(@Validated
+                             @RequestBody final ProductDto productDto) {
         Product product = productMapper.toEntity(productDto);
         Product currentProduct = productService.updateProduct(product);
         return productMapper.toDto(currentProduct);
@@ -68,8 +78,10 @@ public class ProductController {
 
     @PostMapping("/{id}/image")
     @Operation(summary = "Upload image to product")
-    public void uploadImage(@PathVariable Long id,
-                            @Validated @ModelAttribute ProductImageDto productImage) {
+    public void uploadImage(
+            @PathVariable final Long id,
+            @Validated
+            @ModelAttribute final ProductImageDto productImage) {
         ProductImage image = productImageMapper.toEntity(productImage);
         productService.uploadImage(id, image);
     }
