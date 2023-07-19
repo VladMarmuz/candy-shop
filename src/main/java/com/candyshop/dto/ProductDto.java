@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Data
 @Schema(description = "Product create DTO")
@@ -33,5 +32,5 @@ public class ProductDto {
     private Balance balance;
 
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private List<String> images;
+    private String image;
 }

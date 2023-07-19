@@ -10,9 +10,6 @@ import com.candyshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,28 +30,20 @@ public class UserService implements UserDetailsService {
 
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "UserService::getById", key = "#userId")
     public User getById(final Long userId) {
-        User currentUser = userRepository.findUserById(userId)
+        return userRepository.findUserById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "User not found"));
-        return currentUser;
     }
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "UserService:getByEmail", key = "#email")
     public User getByEmail(final String email) {
-        User currentUser = userRepository.findUserByEmail(email)
+        return userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "User not found"));
-        return currentUser;
     }
 
     @Transactional
-    @Caching(cacheable = {
-            @Cacheable(value = "UserService::getById", key = "#user.id"),
-            @Cacheable(value = "UserService::getByEmail", key = "#user.email")
-    })
     public User create(final User user) {
         if (userRepository.findUserByEmail(user.getEmail()).isPresent()) {
             throw new IllegalStateException("User already exists.");
@@ -103,10 +92,6 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    @Caching(put = {
-            @CachePut(value = "UserService::getById", key = "#userId"),
-            @CachePut(value = "UserService::getByEmail", key = "#user.email"),
-    })
     public User update(final Long userId, final User user) {
         User currentUser = getById(userId);
         currentUser.setName(user.getName());

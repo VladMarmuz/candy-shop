@@ -7,9 +7,8 @@ import com.candyshop.exception.ResourceNotFoundException;
 import com.candyshop.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +23,6 @@ public class ProductService {
     private final ImageService imageService;
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "ProductService::getProduct", key = "#id")
     public Product getProduct(final Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -32,31 +30,28 @@ public class ProductService {
     }
 
     @Transactional
-    @Cacheable(value = "ProductService::getProduct", key = "#product.id")
     public Product create(final Product product) {
         product.setBalance(Balance.IN_STOCK);
         return productRepository.save(product);
     }
 
     @Transactional(readOnly = true)
-    public List<Product> getAll() {
-        List<Product> allProducts = productRepository.findAll();
-        if (allProducts.isEmpty()) {
+    public List<Product> getAll(final PageRequest pageRequest) {
+        Page<Product> page = productRepository.findAll(pageRequest);
+        if (page.isEmpty()) {
             throw new ResourceNotFoundException(
                     "There are doesn't have product in the db");
         }
-        return allProducts;
+        return page.getContent();
     }
 
     @Transactional
-    @CacheEvict(value = "ProductService::getProduct", key = "#productId")
     public void deleteProduct(final Long productId) {
         getProduct(productId);
         productRepository.deleteById(productId);
     }
 
     @Transactional
-    @CachePut(value = "ProductService::getProduct", key = "#product.id")
     public Product updateProduct(final Product product) {
         Product foundProduct = getProduct(product.getId());
         foundProduct.setName(product.getName());
@@ -67,11 +62,10 @@ public class ProductService {
     }
 
     @Transactional
-    @CacheEvict(value = "ProductService::getProduct", key = "#id")
     public void uploadImage(final Long id, final ProductImage image) {
         Product product = getProduct(id);
         String fileName = imageService.upload(image);
-        product.getImages().add(fileName);
+        product.setImage(fileName);
         productRepository.save(product);
     }
 }

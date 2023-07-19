@@ -1,9 +1,7 @@
 package com.candyshop.entity;
 
 import com.candyshop.entity.enums.Balance;
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -19,7 +17,6 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -46,9 +43,7 @@ public class Product implements Serializable {
     private Balance balance;
 
     @Column(name = "image")
-    @CollectionTable(name = "products_images")
-    @ElementCollection
-    private List<String> images;
+    private String image;
 
     @Override
     public boolean equals(final Object o) {

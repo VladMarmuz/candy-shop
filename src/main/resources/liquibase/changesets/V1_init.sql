@@ -69,8 +69,11 @@ CREATE TABLE IF NOT EXISTS products
     balance VARCHAR
 (
     255
-) NOT NULL
-    );
+) NOT NULL,
+    image VARCHAR
+(
+    255
+));
 
 CREATE TABLE IF NOT EXISTS products_into_basket
 (
@@ -189,17 +192,4 @@ CREATE TABLE IF NOT EXISTS basket_product
     basket_id,
     product_id
 )
-    );
-
-CREATE TABLE IF NOT EXISTS products_images
-(
-    product_id BIGINT REFERENCES products
-(
-    product_id
-) ON DELETE CASCADE
-  ON UPDATE NO ACTION ,
-    image VARCHAR
-(
-    255
-) NOT NULL
     );

@@ -12,8 +12,6 @@ import com.candyshop.repository.ProductOrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,14 +31,11 @@ public class OrderService {
     private final ProductOrderRepository productOrderRepository;
 
     @Transactional(readOnly = true)
-    @Cacheable(value = "OrderService::getOrdersByUserId", key = "#userId")
     public List<Order> getOrdersByUserId(final Long userId) {
         return orderRepository.findOrdersByUserId(userId);
     }
 
     @Transactional
-    @Cacheable(value = "OrderService::getOrdersByUserId",
-            key = "#orderCreateDto.userId")
     public Order create(final OrderCreateDto orderCreateDto) {
         Basket basket =
                 basketService.getBasketByUserId(orderCreateDto.getUserId());
@@ -84,14 +79,9 @@ public class OrderService {
         Optional<Order> currentOrder = orderRepository.findById(orderId);
         if (currentOrder.isPresent()) {
             orderRepository.deleteById(orderId);
-            evictOrderCache(currentOrder.get().getUser().getId());
         } else {
             throw new ResourceNotFoundException("Order doesn't exists");
         }
     }
 
-    @CacheEvict(value = "OrderService::getOrdersByUserId", key = "#userId")
-    public void evictOrderCache(final Long userId) {
-        //this method is needed for caching after deletion
-    }
 }
