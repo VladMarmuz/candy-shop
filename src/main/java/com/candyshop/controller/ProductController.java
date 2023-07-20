@@ -60,7 +60,7 @@ public class ProductController {
     @GetMapping("/{fragment}")
     @Operation(summary = "Get products by some letters")
     public List<ProductDto> getProductsBySomeLetters(
-            @PathVariable String fragment) {
+            @PathVariable final String fragment) {
         List<Product> currentProducts =
                 productService.getProductsByNameContaining(fragment);
         return productMapper.toDto(currentProducts);

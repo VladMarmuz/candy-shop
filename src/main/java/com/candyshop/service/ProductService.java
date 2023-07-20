@@ -69,12 +69,12 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    public List<Product> getProductsByNameContaining(String fragment) {
+    public List<Product> getProductsByNameContaining(final String fragment) {
         List<Product> allProductsByFragment =
                 productRepository.findAllByNameContainingIgnoreCase(fragment);
         if (allProductsByFragment.isEmpty()) {
-            throw new ResourceNotFoundException("Such kind of products " +
-                    "don't exists in the db");
+            throw new ResourceNotFoundException("Such kind of products "
+                    + "don't exists in the db");
         }
         return allProductsByFragment;
     }
