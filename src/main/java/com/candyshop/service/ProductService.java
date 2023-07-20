@@ -68,4 +68,14 @@ public class ProductService {
         product.setImage(fileName);
         productRepository.save(product);
     }
+
+    public List<Product> getProductsByNameContaining(String fragment) {
+        List<Product> allProductsByFragment =
+                productRepository.findAllByNameContainingIgnoreCase(fragment);
+        if (allProductsByFragment.isEmpty()) {
+            throw new ResourceNotFoundException("Such kind of products " +
+                    "don't exists in the db");
+        }
+        return allProductsByFragment;
+    }
 }

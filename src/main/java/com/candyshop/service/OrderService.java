@@ -84,4 +84,11 @@ public class OrderService {
         }
     }
 
+    public List<Order> getOrdersSortedByDate() {
+        List<Order> orderList = orderRepository.findAllByOrderByDateAsc();
+        if (orderList.isEmpty()) {
+            throw new ResourceNotFoundException("Orders don't exists");
+        }
+        return orderList;
+    }
 }

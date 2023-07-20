@@ -36,6 +36,13 @@ public class OrderController {
                 .toList();
     }
 
+    @GetMapping("/")
+    @Operation(summary = "Get all orders sorted by date")
+    public List<OrderDto> getOrders() {
+        List<Order> foundOrders = orderService.getOrdersSortedByDate();
+        return orderMapper.toDto(foundOrders);
+    }
+
     @PostMapping("/")
     @Operation(summary = "Create Order")
     public OrderDto createOrder(
