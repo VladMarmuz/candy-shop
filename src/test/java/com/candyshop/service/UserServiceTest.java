@@ -8,12 +8,15 @@ import com.candyshop.repository.BasketRepository;
 import com.candyshop.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,7 +59,8 @@ class UserServiceTest {
 
         assertThrows(ResourceNotFoundException.class,
                 () -> userService.getById(ID));
-        verify(userRepository, times(1)).findUserById(ID);
+        verify(userRepository, times(1))
+                .findUserById(ID);
     }
 
     @Test
@@ -90,11 +94,14 @@ class UserServiceTest {
 
     @Test
     void testGetByEmail_NullEmail() {
-        when(userRepository.findUserByEmail(any())).thenReturn(Optional.empty());
+        when(userRepository.findUserByEmail(any()))
+                .thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> userService.getByEmail(null));
+        assertThrows(ResourceNotFoundException.class,
+                () -> userService.getByEmail(null));
 
-        verify(userRepository, times(1)).findUserByEmail(any());
+        verify(userRepository, times(1))
+                .findUserByEmail(any());
     }
 
     @Test
@@ -126,8 +133,8 @@ class UserServiceTest {
         existingUser.setEmail(testEmail);
         existingUser.setPassword("testPassword");
 
-        when(userRepository.findUserByEmail(
-                existingUser.getEmail())).thenReturn(Optional.of(existingUser));
+        when(userRepository.findUserByEmail(existingUser.getEmail()))
+                .thenReturn(Optional.of(existingUser));
 
         assertThrows(IllegalStateException.class,
                 () -> userService.create(existingUser));
@@ -156,6 +163,119 @@ class UserServiceTest {
         User createdUser = userService.create(user);
 
         assertNotNull(createdUser.getBasket());
+    }
+
+    @Test
+    void testGetAllUsers_Successful() {
+        List<User> expectedUsers = List.of(new User(), new User());
+        when(userRepository.findAll()).thenReturn(expectedUsers);
+
+        List<User> actualUsers = userService.getAll();
+
+        assertEquals(expectedUsers, actualUsers);
+    }
+
+    @Test
+    void testGetAll_WithEmptyList() {
+        when(userRepository.findAll()).thenReturn(Collections.emptyList());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> userService.getAll());
+    }
+
+    @Test
+    void testGetAll_WithNullList() {
+        when(userRepository.findAll()).thenReturn(null);
+
+        assertThrows(NullPointerException.class, () -> userService.getAll());
+    }
+
+    @Test
+    void testDeleteUser_Transaction() {
+        User user = new User();
+        user.setId(ID);
+        when(userRepository.findUserById(ID)).thenReturn(Optional.of(user));
+
+        userService.deleteUser(ID);
+
+        InOrder inOrder = inOrder(userRepository, basketRepository);
+        inOrder.verify(userRepository).findUserById(ID);
+        inOrder.verify(userRepository).deleteById(ID);
+    }
+
+    @Test
+    void testDeleteUser_Success() {
+        User user = new User();
+        user.setId(ID);
+        when(userRepository.findUserById(ID)).thenReturn(Optional.of(user));
+
+        userService.deleteUser(ID);
+
+        verify(userRepository, times(1)).findUserById(ID);
+        verify(userRepository, times(1)).deleteById(ID);
+    }
+
+    @Test
+    void testDeleteUser_UserNotFound() {
+        when(userRepository.findUserById(ID)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> userService.deleteUser(ID));
+        verify(userRepository, times(1)).findUserById(ID);
+        verify(userRepository, never()).deleteById(ID);
+    }
+
+    @Test
+    void testUpdateUserDetails_UserNotFound() {
+        User updatedUser = User.builder()
+                .id(ID)
+                .name("John Doe")
+                .email("john.doe@example.com")
+                .password("newpassword")
+                .role(Role.ROLE_ADMIN)
+                .build();
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> userService.update(ID, updatedUser));
+        verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void testUpdateUserDetails_ValidUserId() {
+        User existingUser = User.builder()
+                .id(ID)
+                .name("John")
+                .email("john@example.com")
+                .password("123456")
+                .role(Role.ROLE_USER)
+                .build();
+
+        User updatedUser = User.builder()
+                .id(ID)
+                .name("John Doe")
+                .email("john.doe@example.com")
+                .password("newpassword")
+                .role(Role.ROLE_ADMIN)
+                .build();
+
+        when(userRepository.findUserById(ID))
+                .thenReturn(Optional.of(existingUser));
+        when(userRepository.save(any())).thenReturn(updatedUser);
+        when(passwordEncoder.encode(updatedUser.getPassword()))
+                .thenReturn("encodedPassword");
+
+        User result = userService.update(ID, updatedUser);
+
+        assertEquals(updatedUser.getName(), result.getName());
+        assertEquals(updatedUser.getEmail(), result.getEmail());
+        assertEquals("newpassword", result.getPassword());
+        assertEquals(updatedUser.getPhoneNumber(), result.getPhoneNumber());
+        assertEquals(updatedUser.getRole(), result.getRole());
+
+        verify(userRepository, times(1)).findUserById(ID);
+        verify(userRepository, times(1)).save(any());
+        verify(passwordEncoder, times(1))
+                .encode(updatedUser.getPassword());
     }
 
 

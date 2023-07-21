@@ -8,7 +8,6 @@ import com.candyshop.exception.ResourceNotFoundException;
 import com.candyshop.repository.BasketRepository;
 import com.candyshop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -81,7 +80,6 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    @CacheEvict(value = "UserService::getById", key = "#userId")
     public void deleteUser(final Long userId) {
         User currentUser = userRepository.findUserById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(
