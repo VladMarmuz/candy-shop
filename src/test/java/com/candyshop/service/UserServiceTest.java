@@ -227,13 +227,7 @@ class UserServiceTest {
 
     @Test
     void testUpdateUserDetails_UserNotFound() {
-        User updatedUser = User.builder()
-                .id(ID)
-                .name("John Doe")
-                .email("john.doe@example.com")
-                .password("newpassword")
-                .role(Role.ROLE_ADMIN)
-                .build();
+        User updatedUser = getUpdatedUser("John Doe", "john.doe@example.com", "newpassword", Role.ROLE_ADMIN);
 
         assertThrows(ResourceNotFoundException.class,
                 () -> userService.update(ID, updatedUser));
@@ -242,21 +236,12 @@ class UserServiceTest {
 
     @Test
     void testUpdateUserDetails_ValidUserId() {
-        User existingUser = User.builder()
-                .id(ID)
-                .name("John")
-                .email("john@example.com")
-                .password("123456")
-                .role(Role.ROLE_USER)
-                .build();
+        User existingUser = getUpdatedUser("John",
+                "john@example.com", "123456", Role.ROLE_USER);
 
-        User updatedUser = User.builder()
-                .id(ID)
-                .name("John Doe")
-                .email("john.doe@example.com")
-                .password("newpassword")
-                .role(Role.ROLE_ADMIN)
-                .build();
+        User updatedUser = getUpdatedUser("John Doe",
+                "john.doe@example.com", "newpassword",
+                Role.ROLE_ADMIN);
 
         when(userRepository.findUserById(ID))
                 .thenReturn(Optional.of(existingUser));
@@ -276,6 +261,19 @@ class UserServiceTest {
         verify(userRepository, times(1)).save(any());
         verify(passwordEncoder, times(1))
                 .encode(updatedUser.getPassword());
+    }
+
+    private User getUpdatedUser(String John_Doe,
+                                String email,
+                                String password,
+                                Role roleAdmin) {
+        return User.builder()
+                .id(ID)
+                .name(John_Doe)
+                .email(email)
+                .password(password)
+                .role(roleAdmin)
+                .build();
     }
 
 
