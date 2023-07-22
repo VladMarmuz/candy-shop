@@ -199,7 +199,7 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
-                            <suppressionsFileExpression></suppressionsFileExpression>
+                            <suppressionsFileExpression/>
                             <suppressionsLocation/>
                         </configuration>
                     </execution>
