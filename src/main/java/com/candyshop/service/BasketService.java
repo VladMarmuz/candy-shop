@@ -26,6 +26,7 @@ public class BasketService {
     private final ProductService productService;
     private final ProductIntoBasketRepository productIntoBasketRepository;
 
+
     @Transactional(readOnly = true)
     public Basket getBasketByUserId(final Long userId) {
         return basketRepository.findBasketByUserId(userId);
@@ -76,9 +77,9 @@ public class BasketService {
         basketRepository.save(currentBasket);
     }
 
-    private void setPriceResultToBasket(final Basket currentBasket,
-                                        final int numberOfAdded,
-                                        final BigDecimal price) {
+    public void setPriceResultToBasket(final Basket currentBasket,
+                                       final int numberOfAdded,
+                                       final BigDecimal price) {
         currentBasket.setPriceResult(currentBasket.getPriceResult()
                 .add(price.multiply(new BigDecimal(numberOfAdded))));
     }
