@@ -6,6 +6,7 @@ import com.candyshop.entity.enums.Role;
 import com.candyshop.exception.ResourceNotFoundException;
 import com.candyshop.repository.BasketRepository;
 import com.candyshop.repository.UserRepository;
+import com.candyshop.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class})
-class UserServiceTest {
+class UserServiceImplTest {
     private final Long ID = 1L;
     private final String testEmail = "test@example.com";
 
@@ -37,7 +38,7 @@ class UserServiceTest {
     private BasketRepository basketRepository;
 
     @InjectMocks
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     @Test
     void testGetById_PositiveScenario() {
@@ -46,7 +47,7 @@ class UserServiceTest {
 
         when(userRepository.findUserById(ID)).thenReturn(Optional.of(user));
 
-        User result = userService.getById(ID);
+        User result = userServiceImpl.getById(ID);
 
         assertEquals(ID, result.getId());
         verify(userRepository, times(1)).findUserById(ID);
@@ -58,7 +59,7 @@ class UserServiceTest {
         when(userRepository.findUserById(ID)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> userService.getById(ID));
+                () -> userServiceImpl.getById(ID));
         verify(userRepository, times(1))
                 .findUserById(ID);
     }
@@ -71,7 +72,7 @@ class UserServiceTest {
         when(userRepository.findUserByEmail(testEmail))
                 .thenReturn(Optional.of(user));
 
-        User result = userService.getByEmail(testEmail);
+        User result = userServiceImpl.getByEmail(testEmail);
 
         assertNotNull(result);
         assertEquals(testEmail, result.getEmail());
@@ -86,7 +87,7 @@ class UserServiceTest {
                 .thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> userService.getByEmail(testEmail));
+                () -> userServiceImpl.getByEmail(testEmail));
 
         verify(userRepository, times(1))
                 .findUserByEmail(testEmail);
@@ -98,7 +99,7 @@ class UserServiceTest {
                 .thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> userService.getByEmail(null));
+                () -> userServiceImpl.getByEmail(null));
 
         verify(userRepository, times(1))
                 .findUserByEmail(any());
@@ -116,7 +117,7 @@ class UserServiceTest {
                 .thenReturn("encodedPassword");
         when(basketRepository.save(any(Basket.class))).thenReturn(new Basket());
 
-        User createdUser = userService.create(user);
+        User createdUser = userServiceImpl.create(user);
 
         assertNotNull(createdUser);
         assertEquals(Role.ROLE_USER, createdUser.getRole());
@@ -137,7 +138,7 @@ class UserServiceTest {
                 .thenReturn(Optional.of(existingUser));
 
         assertThrows(IllegalStateException.class,
-                () -> userService.create(existingUser));
+                () -> userServiceImpl.create(existingUser));
         verify(userRepository, never()).save(existingUser);
         verify(basketRepository, never()).save(any(Basket.class));
     }
@@ -160,7 +161,7 @@ class UserServiceTest {
                     return savedBasket;
                 });
 
-        User createdUser = userService.create(user);
+        User createdUser = userServiceImpl.create(user);
 
         assertNotNull(createdUser.getBasket());
     }
@@ -170,7 +171,7 @@ class UserServiceTest {
         List<User> expectedUsers = List.of(new User(), new User());
         when(userRepository.findAll()).thenReturn(expectedUsers);
 
-        List<User> actualUsers = userService.getAll();
+        List<User> actualUsers = userServiceImpl.getAll();
 
         assertEquals(expectedUsers, actualUsers);
     }
@@ -180,14 +181,14 @@ class UserServiceTest {
         when(userRepository.findAll()).thenReturn(Collections.emptyList());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> userService.getAll());
+                () -> userServiceImpl.getAll());
     }
 
     @Test
     void testGetAll_WithNullList() {
         when(userRepository.findAll()).thenReturn(null);
 
-        assertThrows(NullPointerException.class, () -> userService.getAll());
+        assertThrows(NullPointerException.class, () -> userServiceImpl.getAll());
     }
 
     @Test
@@ -196,7 +197,7 @@ class UserServiceTest {
         user.setId(ID);
         when(userRepository.findUserById(ID)).thenReturn(Optional.of(user));
 
-        userService.deleteUser(ID);
+        userServiceImpl.deleteUser(ID);
 
         InOrder inOrder = inOrder(userRepository, basketRepository);
         inOrder.verify(userRepository).findUserById(ID);
@@ -209,7 +210,7 @@ class UserServiceTest {
         user.setId(ID);
         when(userRepository.findUserById(ID)).thenReturn(Optional.of(user));
 
-        userService.deleteUser(ID);
+        userServiceImpl.deleteUser(ID);
 
         verify(userRepository, times(1)).findUserById(ID);
         verify(userRepository, times(1)).deleteById(ID);
@@ -220,7 +221,7 @@ class UserServiceTest {
         when(userRepository.findUserById(ID)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> userService.deleteUser(ID));
+                () -> userServiceImpl.deleteUser(ID));
         verify(userRepository, times(1)).findUserById(ID);
         verify(userRepository, never()).deleteById(ID);
     }
@@ -230,7 +231,7 @@ class UserServiceTest {
         User updatedUser = getUpdatedUser("John Doe", "john.doe@example.com", "newpassword", Role.ROLE_ADMIN);
 
         assertThrows(ResourceNotFoundException.class,
-                () -> userService.update(ID, updatedUser));
+                () -> userServiceImpl.update(ID, updatedUser));
         verify(userRepository, never()).save(any());
     }
 
@@ -249,7 +250,7 @@ class UserServiceTest {
         when(passwordEncoder.encode(updatedUser.getPassword()))
                 .thenReturn("encodedPassword");
 
-        User result = userService.update(ID, updatedUser);
+        User result = userServiceImpl.update(ID, updatedUser);
 
         assertEquals(updatedUser.getName(), result.getName());
         assertEquals(updatedUser.getEmail(), result.getEmail());

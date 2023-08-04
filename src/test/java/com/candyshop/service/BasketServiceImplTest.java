@@ -8,6 +8,8 @@ import com.candyshop.entity.enums.Balance;
 import com.candyshop.exception.ResourceNotFoundException;
 import com.candyshop.repository.BasketRepository;
 import com.candyshop.repository.ProductIntoBasketRepository;
+import com.candyshop.service.impl.BasketServiceImpl;
+import com.candyshop.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,17 +24,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class BasketServiceTest {
+class BasketServiceImplTest {
     private final Long ID = 1L;
 
     @Mock
     private BasketRepository basketRepository;
     @Mock
-    private ProductService productService;
+    private ProductServiceImpl productServiceImpl;
     @Mock
     private ProductIntoBasketRepository productIntoBasketRepository;
     @InjectMocks
-    private BasketService basketService;
+    private BasketServiceImpl basketServiceImpl;
 
     @Test
     void testGetBasketByUserId_Ok() {
@@ -40,7 +42,7 @@ class BasketServiceTest {
         when(basketRepository.findBasketByUserId(ID))
                 .thenReturn(expectedBasket);
 
-        Basket resultBasket = basketService.getBasketByUserId(ID);
+        Basket resultBasket = basketServiceImpl.getBasketByUserId(ID);
 
         assertNotNull(resultBasket);
         assertEquals(expectedBasket, resultBasket);
@@ -52,7 +54,7 @@ class BasketServiceTest {
                 .thenThrow(new RuntimeException("Database connection failed"));
 
         assertThrows(RuntimeException.class,
-                () -> basketService.getBasketByUserId(ID));
+                () -> basketServiceImpl.getBasketByUserId(ID));
     }
 
     @Test
@@ -62,12 +64,12 @@ class BasketServiceTest {
         ProductIntoBasket existingProductIntoBasket = getProductIntoBasket();
         Basket currentBasket = getBasket(existingProductIntoBasket);
 
-        when(productService.getProduct(ID)).thenReturn(currentProduct);
+        when(productServiceImpl.getProduct(ID)).thenReturn(currentProduct);
         when(basketRepository.findBasketByUserId(ID)).thenReturn(currentBasket);
         when(productIntoBasketRepository.findProductIntoBasketByName(currentProduct.getName()))
                 .thenReturn(Optional.of(existingProductIntoBasket));
 
-        basketService.addProduct(productIntoBasketDto);
+        basketServiceImpl.addProduct(productIntoBasketDto);
 
         verify(productIntoBasketRepository, times(1)).save(existingProductIntoBasket);
         verify(basketRepository, times(1)).save(currentBasket);
@@ -82,7 +84,7 @@ class BasketServiceTest {
         when(productIntoBasketRepository.findById(ID)).thenReturn(Optional.of(productIntoBasket));
         when(basketRepository.findBasketByProductId(ID)).thenReturn(basket);
 
-        basketService.deleteProductFromBasket(ID);
+        basketServiceImpl.deleteProductFromBasket(ID);
 
         assertEquals(BigDecimal.valueOf(0L), basket.getPriceResult());
         verify(productIntoBasketRepository, times(1)).deleteProductIntoBasketById(ID);
@@ -96,7 +98,7 @@ class BasketServiceTest {
 
         when(productIntoBasketRepository.findById(ID)).thenReturn(Optional.empty());
 
-        basketService.deleteProductFromBasket(ID);
+        basketServiceImpl.deleteProductFromBasket(ID);
 
         assertEquals(BigDecimal.valueOf(100L), basket.getPriceResult());
     }
@@ -105,7 +107,7 @@ class BasketServiceTest {
     void testDeleteAllProductFromBasket_BasketEmpty_ShouldThrowException() {
         when(productIntoBasketRepository.findAll()).thenReturn(List.of());
 
-        assertThrows(ResourceNotFoundException.class, () -> basketService.deleteAllProductFromBasket(ID));
+        assertThrows(ResourceNotFoundException.class, () -> basketServiceImpl.deleteAllProductFromBasket(ID));
         verify(productIntoBasketRepository, never()).deleteAllProductFromBasket(ID);
         verify(basketRepository, never()).save(any());
     }

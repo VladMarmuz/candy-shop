@@ -48,8 +48,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public UserLoginResponse refresh(@RequestBody
-                                         final RefreshToken refreshToken) {
+    public UserLoginResponse refresh(@RequestBody final RefreshToken refreshToken) {
         return authService.refresh(refreshToken);
     }
 }

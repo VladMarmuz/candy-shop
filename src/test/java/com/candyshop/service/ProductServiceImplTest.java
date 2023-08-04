@@ -4,6 +4,8 @@ import com.candyshop.entity.Product;
 import com.candyshop.entity.enums.Balance;
 import com.candyshop.exception.ResourceNotFoundException;
 import com.candyshop.repository.ProductRepository;
+import com.candyshop.service.impl.ImageServiceImpl;
+import com.candyshop.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,16 +23,16 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class})
-class ProductServiceTest {
+class ProductServiceImplTest {
     private final Long ID = 1L;
 
     @Mock
     private ProductRepository productRepository;
     @Mock
-    private ImageService imageService;
+    private ImageServiceImpl imageServiceImpl;
 
     @InjectMocks
-    private ProductService productService;
+    private ProductServiceImpl productServiceImpl;
 
     @Test
     void testGetProduct_ValidId_ReturnsProduct() {
@@ -39,7 +41,7 @@ class ProductServiceTest {
         when(productRepository.findById(ID))
                 .thenReturn(Optional.of(mockProduct));
 
-        Product result = productService.getProduct(ID);
+        Product result = productServiceImpl.getProduct(ID);
 
         assertEquals(mockProduct, result);
         verify(productRepository, times(1)).findById(ID);
@@ -50,7 +52,7 @@ class ProductServiceTest {
         when(productRepository.findById(ID)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> productService.getProduct(ID));
+                () -> productServiceImpl.getProduct(ID));
 
         verify(productRepository, times(1)).findById(ID);
     }
@@ -58,10 +60,10 @@ class ProductServiceTest {
     @Test
     void testCreate_ValidProduct_ReturnsCreatedProductWithInStockBalance() {
         Product productToCreate = getProduct();
-        when(productService.create(productToCreate))
+        when(productServiceImpl.create(productToCreate))
                 .thenReturn(productToCreate);
 
-        Product createdProduct = productService.create(productToCreate);
+        Product createdProduct = productServiceImpl.create(productToCreate);
 
         assertNotNull(createdProduct.getId());
         assertEquals(productToCreate.getName(), createdProduct.getName());
@@ -93,7 +95,7 @@ class ProductServiceTest {
         when(mockPage.getContent()).thenReturn(mockProducts);
         when(productRepository.findAll(pageRequest)).thenReturn(mockPage);
 
-        List<Product> result = productService.getAll(pageRequest);
+        List<Product> result = productServiceImpl.getAll(pageRequest);
 
         assertFalse(result.isEmpty());
         assertEquals(mockProducts.size(), result.size());
@@ -113,7 +115,7 @@ class ProductServiceTest {
         when(productRepository.findAll(pageRequest)).thenReturn(emptyPage);
 
         assertThrows(ResourceNotFoundException.class,
-                () -> productService.getAll(pageRequest));
+                () -> productServiceImpl.getAll(pageRequest));
         verify(productRepository, times(1))
                 .findAll(pageRequest);
     }
@@ -124,7 +126,7 @@ class ProductServiceTest {
         when(productRepository.findById(ID))
                 .thenReturn(Optional.of(mockProduct));
 
-        productService.deleteProduct(ID);
+        productServiceImpl.deleteProduct(ID);
 
         verify(productRepository, times(1))
                 .deleteById(ID);
@@ -135,7 +137,7 @@ class ProductServiceTest {
         when(productRepository.findById(ID)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> productService.deleteProduct(ID));
+                () -> productServiceImpl.deleteProduct(ID));
         verify(productRepository, times(0))
                 .deleteById(ID);
     }
@@ -155,7 +157,7 @@ class ProductServiceTest {
         when(productRepository.save(existingProduct))
                 .thenReturn(existingProduct);
 
-        Product result = productService.updateProduct(updatedProduct);
+        Product result = productServiceImpl.updateProduct(updatedProduct);
 
         assertEquals(updatedProduct.getId(), result.getId());
         assertEquals(updatedProduct.getName(), result.getName());
@@ -173,7 +175,7 @@ class ProductServiceTest {
         when(productRepository.findById(ID)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> productService.updateProduct(invalidProduct));
+                () -> productServiceImpl.updateProduct(invalidProduct));
         verify(productRepository,
                 times(0)).save(invalidProduct);
     }
