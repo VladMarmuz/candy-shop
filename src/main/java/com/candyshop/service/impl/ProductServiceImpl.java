@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -75,10 +76,10 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getProductsByNameContaining(final String fragment) {
         List<Product> allProductsByFragment =
                 productRepository.findAllByNameContainingIgnoreCase(fragment);
-        if (allProductsByFragment.isEmpty()) {
-            throw new ResourceNotFoundException("Such kind of products "
-                    + "don't exists in the db");
-        }
-        return allProductsByFragment;
+
+        return Optional.of(allProductsByFragment)
+                .filter(list -> !list.isEmpty())
+                .orElseThrow(() -> new ResourceNotFoundException("Such kind of products "
+                        + "don't exist in the db"));
     }
 }

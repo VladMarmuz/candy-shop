@@ -32,9 +32,7 @@ public class AuthController {
     private final UserMapper userMapper;
 
     @PostMapping("/login")
-    public UserLoginResponse login(
-            @Validated @RequestBody final UserLoginRequest loginRequest) {
-
+    public UserLoginResponse login(@Validated @RequestBody final UserLoginRequest loginRequest) {
         return authService.login(loginRequest);
     }
 

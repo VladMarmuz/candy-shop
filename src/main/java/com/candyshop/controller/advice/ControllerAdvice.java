@@ -56,8 +56,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleArgumentNotValid(
-            final MethodArgumentNotValidException e) {
+    public ExceptionBody handleArgumentNotValid(final MethodArgumentNotValidException e) {
         ExceptionBody eBody = new ExceptionBody("Validation failed");
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
         eBody.setErrors(fieldErrors.stream()
@@ -69,8 +68,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ExceptionBody handleConstraintViolation(
-            final ConstraintViolationException e) {
+    public ExceptionBody handleConstraintViolation(final ConstraintViolationException e) {
         ExceptionBody eBody = new ExceptionBody("Validation failed");
         eBody.setErrors(e.getConstraintViolations().stream()
                 .collect(Collectors.toMap(

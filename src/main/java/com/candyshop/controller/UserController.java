@@ -55,8 +55,7 @@ public class UserController {
     @PutMapping("/{userId}")
     @Operation(summary = "Update User")
     public UserDto update(@PathVariable final Long userId,
-                          @Validated
-                          @RequestBody final UserUpdateRequest updateRequest) {
+                          @Validated @RequestBody final UserUpdateRequest updateRequest) {
         User user = requestMapper.toEntity(updateRequest);
         User updatedUser = userService.update(userId, user);
         return userMapper.toDto(updatedUser);

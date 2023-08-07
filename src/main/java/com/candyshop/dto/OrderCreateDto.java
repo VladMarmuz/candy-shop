@@ -14,7 +14,7 @@ public class OrderCreateDto {
     private Long userId;
 
     @Schema(description = "Client address",
-            example = "Soligorsk, Komsomola 33-32")
+            example = "Soligorsk, Komsomola 77-77")
     @NotNull(message = "Address must be not null")
     private String address;
 

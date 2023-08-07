@@ -45,8 +45,7 @@ public class OrderController {
 
     @PostMapping("/")
     @Operation(summary = "Create Order")
-    public OrderDto createOrder(
-            @RequestBody final OrderCreateDto orderCreateDto) {
+    public OrderDto createOrder(@RequestBody final OrderCreateDto orderCreateDto) {
         Order order = orderService.create(orderCreateDto);
         return orderMapper.toDto(order);
     }

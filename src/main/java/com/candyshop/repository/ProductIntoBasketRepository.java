@@ -10,8 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface ProductIntoBasketRepository
-        extends JpaRepository<ProductIntoBasket, Long> {
+public interface ProductIntoBasketRepository extends JpaRepository<ProductIntoBasket, Long> {
 
     void deleteProductIntoBasketById(Long productId);
 
@@ -26,5 +25,5 @@ public interface ProductIntoBasketRepository
                                 WHERE basket_id = :basketId)
             """,
             nativeQuery = true)
-    void deleteAllProductFromBasket(@Param("basketId") Long basketId);
+    int deleteAllProductFromBasket(@Param("basketId") Long basketId);
 }

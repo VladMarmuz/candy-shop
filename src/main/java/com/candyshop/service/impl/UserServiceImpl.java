@@ -28,15 +28,13 @@ public class UserServiceImpl implements UserDetailsService {
     @Transactional(readOnly = true)
     public User getById(final Long userId) {
         return userRepository.findUserById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @Transactional(readOnly = true)
     public User getByEmail(final String email) {
         return userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @Transactional
@@ -62,8 +60,7 @@ public class UserServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(final String email)
-            throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
         User currentUser = getByEmail(email);
         return JwtEntityFactory.create(currentUser);
     }
@@ -72,8 +69,7 @@ public class UserServiceImpl implements UserDetailsService {
     public List<User> getAll() {
         List<User> allUsers = userRepository.findAll();
         if (allUsers.isEmpty()) {
-            throw new ResourceNotFoundException(
-                    "There are doesn't have users in the db");
+            throw new ResourceNotFoundException("There are doesn't have users in the db");
         }
         return allUsers;
     }
@@ -81,8 +77,7 @@ public class UserServiceImpl implements UserDetailsService {
     @Transactional
     public void deleteUser(final Long userId) {
         User currentUser = userRepository.findUserById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         userRepository.deleteById(currentUser.getId());
     }
 
