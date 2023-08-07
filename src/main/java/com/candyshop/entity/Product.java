@@ -33,10 +33,13 @@ public class Product implements Serializable {
     @Column(name = "product_id")
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "description")
     private String description;
 
+    @Column(name = "price")
     private BigDecimal price;
 
     @Enumerated(EnumType.STRING)

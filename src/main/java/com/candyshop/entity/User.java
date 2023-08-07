@@ -38,13 +38,16 @@ public class User implements Serializable {
     @Column(name = "user_id")
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "email")
     private String email;
 
+    @Column(name = "password")
     private String password;
 
     @Column(name = "enabled")

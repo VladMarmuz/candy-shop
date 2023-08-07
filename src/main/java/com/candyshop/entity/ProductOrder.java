@@ -30,8 +30,10 @@ public class ProductOrder implements Serializable {
     @Column(name = "product_id")
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "price")
     private BigDecimal price;
 
     @Column(name = "number_into_basket")
