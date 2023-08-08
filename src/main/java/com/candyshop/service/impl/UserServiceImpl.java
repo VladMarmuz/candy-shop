@@ -45,9 +45,7 @@ public class UserServiceImpl implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.ROLE_USER);
         user.setEnabled(false);
-
         Basket createdBasket = createBasket(user);
-
         user.setBasket(createdBasket);
         userRepository.save(user);
         return user;
