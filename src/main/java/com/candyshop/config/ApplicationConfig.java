@@ -37,9 +37,8 @@ public class ApplicationConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            final AuthenticationConfiguration configuration
-    ) throws Exception {
+    public AuthenticationManager authenticationManager(final AuthenticationConfiguration configuration)
+            throws Exception {
         return configuration.getAuthenticationManager();
     }
 
@@ -76,8 +75,7 @@ public class ApplicationConfig {
 
 
     @Bean
-    public SecurityFilterChain filterChain(final HttpSecurity httpSecurity)
-            throws Exception {
+    public SecurityFilterChain filterChain(final HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf().disable()
                 .cors()
@@ -105,9 +103,9 @@ public class ApplicationConfig {
                 .anyRequest().authenticated()
                 .and()
                 .anonymous().disable()
-                .addFilterBefore(new JwtTokenFilter(jwtTokenManager),
-                        UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtTokenFilter(jwtTokenManager), UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
+
 }
 

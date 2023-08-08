@@ -46,4 +46,5 @@ public class Basket implements Serializable {
 
     @OneToOne(mappedBy = "basket")
     private User user;
+
 }

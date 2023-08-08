@@ -48,10 +48,8 @@ public class ProductController {
     @Operation(summary = "Get all product")
     public List<ProductDto> getAllProducts(
             @RequestParam(required = false, defaultValue = "0") final int page,
-            @RequestParam(required = false, defaultValue = "10") final int size
-    ) {
-        List<Product> currentProducts =
-                productService.getAll(PageRequest.of(page, size));
+            @RequestParam(required = false, defaultValue = "10") final int size) {
+        List<Product> currentProducts = productService.getAll(PageRequest.of(page, size));
         return currentProducts.stream()
                 .map(productMapper::toDto)
                 .toList();
@@ -59,18 +57,15 @@ public class ProductController {
 
     @GetMapping("/{fragment}")
     @Operation(summary = "Get products by some letters")
-    public List<ProductDto> getProductsBySomeLetters(
-            @PathVariable final String fragment) {
-        List<Product> currentProducts =
-                productService.getProductsByNameContaining(fragment);
+    public List<ProductDto> getProductsBySomeLetters(@PathVariable final String fragment) {
+        List<Product> currentProducts = productService.getProductsByNameContaining(fragment);
         return productMapper.toDto(currentProducts);
     }
 
 
     @PostMapping("/create")
     @Operation(summary = "Create product")
-    public ProductDto create(@Validated
-                             @RequestBody final ProductDto productDto) {
+    public ProductDto create(@Validated @RequestBody final ProductDto productDto) {
         Product product = productMapper.toEntity(productDto);
         Product createdProduct = productService.create(product);
         return productMapper.toDto(createdProduct);
@@ -85,8 +80,7 @@ public class ProductController {
 
     @PutMapping("/")
     @Operation(summary = "Update product")
-    public ProductDto update(@Validated
-                             @RequestBody final ProductDto productDto) {
+    public ProductDto update(@Validated @RequestBody final ProductDto productDto) {
         Product product = productMapper.toEntity(productDto);
         Product currentProduct = productService.updateProduct(product);
         return productMapper.toDto(currentProduct);
@@ -96,9 +90,9 @@ public class ProductController {
     @Operation(summary = "Upload image to product")
     public void uploadImage(
             @PathVariable final Long id,
-            @Validated
-            @ModelAttribute final ProductImageDto productImage) {
+            @Validated @ModelAttribute final ProductImageDto productImage) {
         ProductImage image = productImageMapper.toEntity(productImage);
         productService.uploadImage(id, image);
     }
+
 }

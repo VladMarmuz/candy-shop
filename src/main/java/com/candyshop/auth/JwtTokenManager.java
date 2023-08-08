@@ -29,7 +29,6 @@ public class JwtTokenManager {
 
     private final JwtProperties jwtProperties;
     private final UserService userService;
-
     private Key key;
 
     @PostConstruct
@@ -43,8 +42,7 @@ public class JwtTokenManager {
         Claims claims = Jwts.claims().setSubject(email);
         claims.put("id", userId);
         claims.put("role", role);
-        Instant validity = Instant.now()
-                .plus(jwtProperties.getAccess(), ChronoUnit.HOURS);
+        Instant validity = Instant.now().plus(jwtProperties.getAccess(), ChronoUnit.HOURS);
         return Jwts.builder()
                 .setClaims(claims)
                 .setExpiration(Date.from(validity))
@@ -64,9 +62,7 @@ public class JwtTokenManager {
                 .compact();
     }
 
-    public UserLoginResponse refreshUserTokens(final String refreshToken,
-                                               final Long userId) {
-
+    public UserLoginResponse refreshUserTokens(final String refreshToken, final Long userId) {
         if (!validateToken(refreshToken)) {
             throw new AccessDeniedException("Access denied");
         }
@@ -93,14 +89,12 @@ public class JwtTokenManager {
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
-
         return !claims.getBody().getExpiration().before(new Date());
     }
 
     public Authentication getAuthentication(final String token) {
         String email = getEmail(token);
         UserDetails userDetails = userService.loadUserByUsername(email);
-
         return new UsernamePasswordAuthenticationToken(
                 userDetails, "",
                 userDetails.getAuthorities());
@@ -108,25 +102,16 @@ public class JwtTokenManager {
 
     private Token createTokenForResponse(final Long userId, final User user) {
         Token token = new Token();
-        token.setAccessToken(createAccessToken(
-                userId,
-                user.getEmail(),
-                user.getRole()));
+        token.setAccessToken(createAccessToken(userId, user.getEmail(), user.getRole()));
         token.setRefreshToken(createRefreshToken(userId, user.getEmail()));
         token.setExpirationIn(jwtProperties.getAccess());
-
         return token;
     }
 
     public Token getToken(final User user) {
         Token token = new Token();
-        token.setAccessToken(createAccessToken(
-                user.getId(),
-                user.getEmail(),
-                user.getRole()));
-        token.setRefreshToken(createRefreshToken(
-                user.getId(),
-                user.getEmail()));
+        token.setAccessToken(createAccessToken(user.getId(), user.getEmail(), user.getRole()));
+        token.setRefreshToken(createRefreshToken(user.getId(), user.getEmail()));
         token.setExpirationIn(jwtProperties.getAccess());
         return token;
     }
@@ -140,4 +125,5 @@ public class JwtTokenManager {
                 .getBody()
                 .getSubject();
     }
+
 }

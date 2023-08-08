@@ -17,10 +17,8 @@ public class OrderDto {
 
     @NotNull(message = "Address must be not null")
     private String address;
-
     private BigDecimal priceResult;
-
     private Status status;
-
     private List<ProductOrder> productOrders;
+
 }

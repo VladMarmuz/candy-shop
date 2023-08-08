@@ -10,4 +10,5 @@ public class UserLoginResponse {
     private Long userId;
     private String name;
     private Token token;
+
 }

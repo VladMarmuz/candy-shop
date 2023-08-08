@@ -9,4 +9,5 @@ public class ProductImageDto {
 
     @NotNull(message = "Image must be not null")
     private MultipartFile file;
+
 }

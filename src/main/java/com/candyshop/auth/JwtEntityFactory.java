@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 public class JwtEntityFactory {
 
     public static JwtEntity create(final User user) {
-
         return new JwtEntity(
                 user.getId(),
                 user.getName(),
@@ -20,7 +19,7 @@ public class JwtEntityFactory {
                 user.getPassword(),
                 user.isEnabled(),
                 mapToGrantedAuthorities(new ArrayList<>(
-                            user.getRole()
+                        user.getRole()
                                 .ordinal()))
         );
     }
@@ -32,4 +31,5 @@ public class JwtEntityFactory {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
     }
+
 }

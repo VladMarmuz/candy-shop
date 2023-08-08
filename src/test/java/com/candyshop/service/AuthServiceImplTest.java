@@ -1,11 +1,12 @@
 package com.candyshop.service;
 
 import com.candyshop.auth.JwtTokenManager;
-import com.candyshop.dto.auth.RefreshToken;
 import com.candyshop.dto.auth.Token;
 import com.candyshop.dto.auth.UserLoginRequest;
 import com.candyshop.dto.auth.UserLoginResponse;
 import com.candyshop.entity.User;
+import com.candyshop.service.impl.AuthServiceImpl;
+import com.candyshop.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,11 +21,11 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class AuthServiceTest {
+class AuthServiceImplTest {
     private final Long ID = 1L;
 
     @Mock
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
 
     @Mock
     private JwtTokenManager jwtTokenManager;
@@ -33,7 +34,7 @@ class AuthServiceTest {
     private AuthenticationManager authenticationManager;
 
     @InjectMocks
-    private AuthService authService;
+    private AuthServiceImpl authServiceImpl;
 
     @Test
     void testLoginSuccess() {
@@ -43,10 +44,10 @@ class AuthServiceTest {
         User user = new User();
         user.setId(ID);
         user.setName("Test User");
-        when(userService.getByEmail(loginRequest.getEmail())).thenReturn(user);
+        when(userServiceImpl.getByEmail(loginRequest.getEmail())).thenReturn(user);
         when(jwtTokenManager.getToken(user)).thenReturn(getToken());
 
-        UserLoginResponse loginResponse = authService.login(loginRequest);
+        UserLoginResponse loginResponse = authServiceImpl.login(loginRequest);
 
         assertEquals(user.getId(), loginResponse.getUserId());
         assertEquals(user.getName(), loginResponse.getName());
@@ -60,13 +61,13 @@ class AuthServiceTest {
         loginRequest.setPassword("password");
         User user = new User();
         user.setId(ID);
-        when(userService.getByEmail(loginRequest.getEmail())).thenReturn(user);
+        when(userServiceImpl.getByEmail(loginRequest.getEmail())).thenReturn(user);
         doThrow(new RuntimeException("Invalid credentials"))
                 .when(authenticationManager)
                 .authenticate(any(UsernamePasswordAuthenticationToken.class));
 
         assertThrows(RuntimeException.class,
-                () -> authService.login(loginRequest));
+                () -> authServiceImpl.login(loginRequest));
     }
 
 

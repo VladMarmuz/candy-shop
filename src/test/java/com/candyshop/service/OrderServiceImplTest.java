@@ -9,6 +9,9 @@ import com.candyshop.entity.enums.Status;
 import com.candyshop.exception.ResourceNotFoundException;
 import com.candyshop.repository.OrderRepository;
 import com.candyshop.repository.ProductOrderRepository;
+import com.candyshop.service.impl.BasketServiceImpl;
+import com.candyshop.service.impl.OrderServiceImpl;
+import com.candyshop.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,20 +31,20 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class})
-class OrderServiceTest {
+class OrderServiceImplTest {
     private final Long ID = 1L;
 
     @Mock
     private OrderRepository orderRepository;
     @Mock
-    private BasketService basketService;
+    private BasketServiceImpl basketServiceImpl;
     @Mock
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
     @Mock
     private ProductOrderRepository prOrRepository;
 
     @InjectMocks
-    private OrderService orderService;
+    private OrderServiceImpl orderServiceImpl;
 
     @Test
     void testGetOrdersByUserId() {
@@ -50,7 +53,7 @@ class OrderServiceTest {
         );
         when(orderRepository.findOrdersByUserId(ID)).thenReturn(mockOrders);
 
-        List<Order> orders = orderService.getOrdersByUserId(ID);
+        List<Order> orders = orderServiceImpl.getOrdersByUserId(ID);
 
         assertEquals(mockOrders, orders);
         assertEquals(3, orders.size());
@@ -61,7 +64,7 @@ class OrderServiceTest {
         when(orderRepository.findOrdersByUserId(ID))
                 .thenReturn(Collections.emptyList());
 
-        List<Order> orders = orderService.getOrdersByUserId(ID);
+        List<Order> orders = orderServiceImpl.getOrdersByUserId(ID);
 
         assertNotNull(orders);
         assertTrue(orders.isEmpty());
@@ -77,12 +80,12 @@ class OrderServiceTest {
         Basket mockBasket = getBasket(productIntoBasket);
 
         when(prOrRepository.save(productOrder)).thenReturn(productOrder);
-        when(basketService.getBasketByUserId(ID)).thenReturn(mockBasket);
+        when(basketServiceImpl.getBasketByUserId(ID)).thenReturn(mockBasket);
 
         Order mockOrder = getOrder(mockBasket);
         when(orderRepository.save(any(Order.class))).thenReturn(mockOrder);
 
-        Order createdOrder = orderService.create(orderCreateDto);
+        Order createdOrder = orderServiceImpl.create(orderCreateDto);
 
         assertNotNull(createdOrder);
         assertEquals(Status.IN_PROCESSING, createdOrder.getStatus());
@@ -95,20 +98,20 @@ class OrderServiceTest {
     void testCreateOrder_EmptyBasket() {
         OrderCreateDto orderCreateDto = getOrderCreateDto();
         Basket mockBasket = new Basket();
-        when(basketService.getBasketByUserId(ID)).thenReturn(mockBasket);
+        when(basketServiceImpl.getBasketByUserId(ID)).thenReturn(mockBasket);
 
         assertThrows(NullPointerException.class,
-                () -> orderService.create(orderCreateDto));
+                () -> orderServiceImpl.create(orderCreateDto));
     }
 
     @Test
     void testCreateOrder_UserNotFound() {
         OrderCreateDto orderCreateDto = getOrderCreateDto();
 
-        when(basketService.getBasketByUserId(ID)).thenReturn(null);
+        when(basketServiceImpl.getBasketByUserId(ID)).thenReturn(null);
 
         assertThrows(NullPointerException.class,
-                () -> orderService.create(orderCreateDto));
+                () -> orderServiceImpl.create(orderCreateDto));
     }
 
     @Test
@@ -117,7 +120,7 @@ class OrderServiceTest {
 
         when(orderRepository.findById(ID)).thenReturn(Optional.of(order));
 
-        orderService.delete(ID);
+        orderServiceImpl.delete(ID);
 
         verify(orderRepository).findById(ID);
         verify(orderRepository).deleteById(ID);
@@ -128,7 +131,7 @@ class OrderServiceTest {
         when(orderRepository.findById(ID)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> orderService.delete(ID));
+                () -> orderServiceImpl.delete(ID));
 
         verify(orderRepository).findById(ID);
         verify(orderRepository, never()).deleteById(anyLong());
@@ -142,7 +145,7 @@ class OrderServiceTest {
 
         when(orderRepository.findAllByOrderByDateAsc()).thenReturn(orderList);
 
-        List<Order> retrievedOrders = orderService.getOrdersSortedByDate();
+        List<Order> retrievedOrders = orderServiceImpl.getOrdersSortedByDate();
 
         assertNotNull(retrievedOrders);
         assertEquals(orderList.size(), retrievedOrders.size());
@@ -155,7 +158,7 @@ class OrderServiceTest {
         when(orderRepository.findAllByOrderByDateAsc()).thenReturn(orderList);
 
         assertThrows(ResourceNotFoundException.class,
-                () -> orderService.getOrdersSortedByDate());
+                () -> orderServiceImpl.getOrdersSortedByDate());
 
         verify(orderRepository).findAllByOrderByDateAsc();
     }

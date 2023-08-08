@@ -10,6 +10,7 @@ import java.util.Collection;
 @Data
 @AllArgsConstructor
 public class JwtEntity implements UserDetails {
+
     private Long id;
     private final String name;
     private final String email;
@@ -41,4 +42,5 @@ public class JwtEntity implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }
