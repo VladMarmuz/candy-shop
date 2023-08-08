@@ -14,4 +14,5 @@ public interface OrderService {
     void delete(Long orderId);
 
     List<Order> getOrdersSortedByDate();
+
 }

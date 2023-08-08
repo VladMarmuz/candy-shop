@@ -104,8 +104,8 @@ public class ApplicationConfig {
                 .and()
                 .anonymous().disable()
                 .addFilterBefore(new JwtTokenFilter(jwtTokenManager), UsernamePasswordAuthenticationFilter.class);
-
         return httpSecurity.build();
     }
+
 }
 

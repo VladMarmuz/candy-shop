@@ -6,4 +6,5 @@ import com.candyshop.entity.Order;
 public interface CollectProductsService {
 
     Order collectProducts(OrderCreateDto orderCreateDto);
+
 }

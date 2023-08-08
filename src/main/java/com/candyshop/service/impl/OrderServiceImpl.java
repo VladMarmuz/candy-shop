@@ -22,7 +22,6 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final CollectProductsService collectProductsService;
 
-
     @Transactional(readOnly = true)
     public List<Order> getOrdersByUserId(final Long userId) {
         return orderRepository.findOrdersByUserId(userId);
@@ -51,4 +50,5 @@ public class OrderServiceImpl implements OrderService {
         }
         return orderList;
     }
+
 }

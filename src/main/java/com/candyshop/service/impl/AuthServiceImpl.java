@@ -42,4 +42,5 @@ public class AuthServiceImpl implements AuthService {
         loginResponse.setToken(jwtTokenManager.getToken(currentUser));
         return loginResponse;
     }
+
 }

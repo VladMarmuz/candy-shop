@@ -94,4 +94,5 @@ public class ProductController {
         ProductImage image = productImageMapper.toEntity(productImage);
         productService.uploadImage(id, image);
     }
+
 }

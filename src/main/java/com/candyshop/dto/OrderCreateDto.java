@@ -17,7 +17,6 @@ public class OrderCreateDto {
             example = "Soligorsk, Komsomola 77-77")
     @NotNull(message = "Address must be not null")
     private String address;
-
     private Status status;
 
 }

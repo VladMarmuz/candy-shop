@@ -14,4 +14,5 @@ public class UserLoginRequest {
 
     @Schema(description = "User password", example = "11petr11")
     private String password;
+
 }

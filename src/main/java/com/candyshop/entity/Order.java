@@ -40,7 +40,6 @@ public class Order implements Serializable {
     private Long id;
 
     private LocalDate date;
-
     private String address;
 
     @Column(name = "price_result")
@@ -58,4 +57,5 @@ public class Order implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
+
 }

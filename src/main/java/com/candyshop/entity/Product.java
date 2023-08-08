@@ -68,4 +68,5 @@ public class Product implements Serializable {
         return Objects.hash(
                 getId(), getName(), getDescription(), getPrice(), getBalance());
     }
+
 }

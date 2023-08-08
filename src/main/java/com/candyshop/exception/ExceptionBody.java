@@ -15,4 +15,5 @@ public class ExceptionBody {
     public ExceptionBody(final String message) {
         this.message = message;
     }
+
 }

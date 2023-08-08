@@ -60,4 +60,5 @@ public class UserController {
         User updatedUser = userService.update(userId, user);
         return userMapper.toDto(updatedUser);
     }
+
 }

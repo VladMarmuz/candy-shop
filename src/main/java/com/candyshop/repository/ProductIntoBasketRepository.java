@@ -26,4 +26,5 @@ public interface ProductIntoBasketRepository extends JpaRepository<ProductIntoBa
             """,
             nativeQuery = true)
     int deleteAllProductFromBasket(@Param("basketId") Long basketId);
+
 }

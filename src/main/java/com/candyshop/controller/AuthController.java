@@ -49,5 +49,6 @@ public class AuthController {
     public UserLoginResponse refresh(@RequestBody final RefreshToken refreshToken) {
         return authService.refresh(refreshToken);
     }
+
 }
 

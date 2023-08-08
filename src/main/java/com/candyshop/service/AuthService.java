@@ -9,4 +9,5 @@ public interface AuthService {
     UserLoginResponse login(UserLoginRequest loginRequest);
 
     UserLoginResponse refresh(final RefreshToken refreshToken);
+
 }

@@ -15,4 +15,5 @@ public class ProductIntoBasketDto {
 
     @Schema(description = "Number of product which need to add", example = "3")
     private int numberOfAdded;
+
 }

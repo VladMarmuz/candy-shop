@@ -91,4 +91,5 @@ public class UserServiceImpl implements UserDetailsService {
         currentUser.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(currentUser);
     }
+
 }

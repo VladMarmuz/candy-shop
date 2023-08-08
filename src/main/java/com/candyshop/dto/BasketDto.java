@@ -16,6 +16,6 @@ public class BasketDto {
     @Schema(description = "Final price for all selected products",
             example = "44.50")
     private BigDecimal priceResult;
-
     private List<ProductIntoBasket> products;
+
 }

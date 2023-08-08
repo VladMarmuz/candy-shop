@@ -7,6 +7,5 @@ import org.mapstruct.ReportingPolicy;
 
 @Mapper(componentModel = "spring",
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface ProductImageMapper extends Mappable<ProductImage,
-                                                     ProductImageDto> {
+public interface ProductImageMapper extends Mappable<ProductImage, ProductImageDto> {
 }

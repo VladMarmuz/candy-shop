@@ -12,4 +12,5 @@ public class JwtProperties {
     private String secret;
     private long access;
     private long refresh;
+
 }

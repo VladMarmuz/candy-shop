@@ -63,11 +63,9 @@ public class JwtTokenManager {
     }
 
     public UserLoginResponse refreshUserTokens(final String refreshToken, final Long userId) {
-
         if (!validateToken(refreshToken)) {
             throw new AccessDeniedException("Access denied");
         }
-
         User user = userService.getById(userId);
         Token token = createTokenForResponse(userId, user);
 
@@ -91,14 +89,12 @@ public class JwtTokenManager {
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token);
-
         return !claims.getBody().getExpiration().before(new Date());
     }
 
     public Authentication getAuthentication(final String token) {
         String email = getEmail(token);
         UserDetails userDetails = userService.loadUserByUsername(email);
-
         return new UsernamePasswordAuthenticationToken(
                 userDetails, "",
                 userDetails.getAuthorities());
@@ -109,7 +105,6 @@ public class JwtTokenManager {
         token.setAccessToken(createAccessToken(userId, user.getEmail(), user.getRole()));
         token.setRefreshToken(createRefreshToken(userId, user.getEmail()));
         token.setExpirationIn(jwtProperties.getAccess());
-
         return token;
     }
 
@@ -130,4 +125,5 @@ public class JwtTokenManager {
                 .getBody()
                 .getSubject();
     }
+
 }

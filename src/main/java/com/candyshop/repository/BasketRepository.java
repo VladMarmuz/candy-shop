@@ -22,5 +22,4 @@ public interface BasketRepository extends JpaRepository<Basket, Long> {
     )
     Basket findBasketByProductId(@Param("productId") Long productId);
 
-
 }

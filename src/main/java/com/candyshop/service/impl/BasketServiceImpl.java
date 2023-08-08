@@ -76,4 +76,5 @@ public class BasketServiceImpl implements BasketService {
         currentBasket.setPriceResult(null);
         basketRepository.save(currentBasket);
     }
+
 }

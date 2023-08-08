@@ -66,4 +66,5 @@ public class ProductIntoBasket implements Serializable {
                 getNumberIntoBasket(),
                 getFinalPrice());
     }
+
 }

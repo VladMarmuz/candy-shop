@@ -16,4 +16,5 @@ public interface BasketFormationService {
     Basket productIsNotInTheBasket(ProductIntoBasketDto productIntoBasketDto,
                                    Basket basket,
                                    Product product);
+
 }

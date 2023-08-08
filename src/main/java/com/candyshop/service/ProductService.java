@@ -21,4 +21,5 @@ public interface ProductService {
     void uploadImage(Long id, ProductImage image);
 
     List<Product> getProductsByNameContaining(String fragment);
+
 }
