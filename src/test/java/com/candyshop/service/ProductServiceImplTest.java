@@ -4,7 +4,6 @@ import com.candyshop.entity.Product;
 import com.candyshop.entity.enums.Balance;
 import com.candyshop.exception.ResourceNotFoundException;
 import com.candyshop.repository.ProductRepository;
-import com.candyshop.service.impl.ImageServiceImpl;
 import com.candyshop.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,12 +23,14 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class})
 class ProductServiceImplTest {
+
     private final Long ID = 1L;
 
     @Mock
     private ProductRepository productRepository;
+
     @Mock
-    private ImageServiceImpl imageServiceImpl;
+    private ImageService imageService;
 
     @InjectMocks
     private ProductServiceImpl productServiceImpl;
@@ -74,7 +75,6 @@ class ProductServiceImplTest {
         verify(productRepository, times(1))
                 .save(productToCreate);
     }
-
 
     @Test
     void testGetAll_ReturnsListOfProducts() {

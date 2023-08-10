@@ -25,6 +25,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class})
 class UserServiceImplTest {
+
     private final Long ID = 1L;
     private final String testEmail = "test@example.com";
 
@@ -276,6 +277,5 @@ class UserServiceImplTest {
                 .role(roleAdmin)
                 .build();
     }
-
 
 }

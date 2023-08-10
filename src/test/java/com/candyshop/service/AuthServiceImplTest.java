@@ -6,7 +6,6 @@ import com.candyshop.dto.auth.UserLoginRequest;
 import com.candyshop.dto.auth.UserLoginResponse;
 import com.candyshop.entity.User;
 import com.candyshop.service.impl.AuthServiceImpl;
-import com.candyshop.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,10 +21,11 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceImplTest {
+
     private final Long ID = 1L;
 
     @Mock
-    private UserServiceImpl userServiceImpl;
+    private UserService userService;
 
     @Mock
     private JwtTokenManager jwtTokenManager;
@@ -44,7 +44,7 @@ class AuthServiceImplTest {
         User user = new User();
         user.setId(ID);
         user.setName("Test User");
-        when(userServiceImpl.getByEmail(loginRequest.getEmail())).thenReturn(user);
+        when(userService.getByEmail(loginRequest.getEmail())).thenReturn(user);
         when(jwtTokenManager.getToken(user)).thenReturn(getToken());
 
         UserLoginResponse loginResponse = authServiceImpl.login(loginRequest);
@@ -61,7 +61,7 @@ class AuthServiceImplTest {
         loginRequest.setPassword("password");
         User user = new User();
         user.setId(ID);
-        when(userServiceImpl.getByEmail(loginRequest.getEmail())).thenReturn(user);
+        when(userService.getByEmail(loginRequest.getEmail())).thenReturn(user);
         doThrow(new RuntimeException("Invalid credentials"))
                 .when(authenticationManager)
                 .authenticate(any(UsernamePasswordAuthenticationToken.class));
@@ -69,7 +69,6 @@ class AuthServiceImplTest {
         assertThrows(RuntimeException.class,
                 () -> authServiceImpl.login(loginRequest));
     }
-
 
     private Token getToken() {
         Token token = new Token();

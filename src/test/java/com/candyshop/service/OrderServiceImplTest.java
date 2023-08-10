@@ -8,10 +8,7 @@ import com.candyshop.entity.ProductOrder;
 import com.candyshop.entity.enums.Status;
 import com.candyshop.exception.ResourceNotFoundException;
 import com.candyshop.repository.OrderRepository;
-import com.candyshop.repository.ProductOrderRepository;
-import com.candyshop.service.impl.BasketServiceImpl;
 import com.candyshop.service.impl.OrderServiceImpl;
-import com.candyshop.service.impl.UserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,16 +29,14 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith({MockitoExtension.class})
 class OrderServiceImplTest {
+
     private final Long ID = 1L;
 
     @Mock
+    private CollectProductsService collectProductsService;
+
+    @Mock
     private OrderRepository orderRepository;
-    @Mock
-    private BasketServiceImpl basketServiceImpl;
-    @Mock
-    private UserServiceImpl userServiceImpl;
-    @Mock
-    private ProductOrderRepository prOrRepository;
 
     @InjectMocks
     private OrderServiceImpl orderServiceImpl;
@@ -73,16 +68,11 @@ class OrderServiceImplTest {
     @Test
     void testCreateOrder_Success() {
         OrderCreateDto orderCreateDto = getOrderCreateDto();
-
         ProductIntoBasket productIntoBasket = getProductIntoBasket();
-        ProductOrder productOrder = getProductOrder(productIntoBasket);
-
         Basket mockBasket = getBasket(productIntoBasket);
-
-        when(prOrRepository.save(productOrder)).thenReturn(productOrder);
-        when(basketServiceImpl.getBasketByUserId(ID)).thenReturn(mockBasket);
-
         Order mockOrder = getOrder(mockBasket);
+
+        when(collectProductsService.collectProducts(orderCreateDto)).thenReturn(mockOrder);
         when(orderRepository.save(any(Order.class))).thenReturn(mockOrder);
 
         Order createdOrder = orderServiceImpl.create(orderCreateDto);
@@ -97,18 +87,8 @@ class OrderServiceImplTest {
     @Test
     void testCreateOrder_EmptyBasket() {
         OrderCreateDto orderCreateDto = getOrderCreateDto();
-        Basket mockBasket = new Basket();
-        when(basketServiceImpl.getBasketByUserId(ID)).thenReturn(mockBasket);
-
-        assertThrows(NullPointerException.class,
-                () -> orderServiceImpl.create(orderCreateDto));
-    }
-
-    @Test
-    void testCreateOrder_UserNotFound() {
-        OrderCreateDto orderCreateDto = getOrderCreateDto();
-
-        when(basketServiceImpl.getBasketByUserId(ID)).thenReturn(null);
+        when(collectProductsService.collectProducts(orderCreateDto))
+                .thenThrow(NullPointerException.class);
 
         assertThrows(NullPointerException.class,
                 () -> orderServiceImpl.create(orderCreateDto));
@@ -203,4 +183,5 @@ class OrderServiceImplTest {
                 .name(p.getName())
                 .build();
     }
+
 }

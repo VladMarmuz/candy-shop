@@ -9,7 +9,6 @@ import com.candyshop.exception.ResourceNotFoundException;
 import com.candyshop.repository.BasketRepository;
 import com.candyshop.repository.ProductIntoBasketRepository;
 import com.candyshop.service.impl.BasketServiceImpl;
-import com.candyshop.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,14 +24,21 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BasketServiceImplTest {
+
     private final Long ID = 1L;
 
     @Mock
     private BasketRepository basketRepository;
+
     @Mock
-    private ProductServiceImpl productServiceImpl;
+    private ProductService productService;
+
     @Mock
     private ProductIntoBasketRepository productIntoBasketRepository;
+
+    @Mock
+    private BasketFormationService basketFormationService;
+
     @InjectMocks
     private BasketServiceImpl basketServiceImpl;
 
@@ -64,7 +70,7 @@ class BasketServiceImplTest {
         ProductIntoBasket existingProductIntoBasket = getProductIntoBasket();
         Basket currentBasket = getBasket(existingProductIntoBasket);
 
-        when(productServiceImpl.getProduct(ID)).thenReturn(currentProduct);
+        when(productService.getProduct(ID)).thenReturn(currentProduct);
         when(basketRepository.findBasketByUserId(ID)).thenReturn(currentBasket);
         when(productIntoBasketRepository.findProductIntoBasketByName(currentProduct.getName()))
                 .thenReturn(Optional.of(existingProductIntoBasket));
@@ -112,7 +118,6 @@ class BasketServiceImplTest {
         verify(basketRepository, never()).save(any());
     }
 
-
     private Product getProduct() {
         Product currentProduct = new Product();
         currentProduct.setId(ID);
@@ -147,4 +152,5 @@ class BasketServiceImplTest {
                 .numberIntoBasket(5)
                 .build();
     }
+
 }
