@@ -1,15 +1,17 @@
-package com.candyshop.service;
+package com.candyshop.service.impl;
 
 import com.candyshop.auth.JwtTokenManager;
 import com.candyshop.dto.auth.Token;
 import com.candyshop.dto.auth.UserLoginRequest;
 import com.candyshop.dto.auth.UserLoginResponse;
 import com.candyshop.entity.User;
+import com.candyshop.service.UserService;
 import com.candyshop.service.impl.AuthServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -49,6 +51,8 @@ class AuthServiceImplTest {
 
         UserLoginResponse loginResponse = authServiceImpl.login(loginRequest);
 
+        Mockito.verify(userService).getByEmail(loginRequest.getEmail());
+        Mockito.verify(jwtTokenManager).getToken(user);
         assertEquals(user.getId(), loginResponse.getUserId());
         assertEquals(user.getName(), loginResponse.getName());
         assertEquals(getToken(), loginResponse.getToken());
@@ -66,6 +70,7 @@ class AuthServiceImplTest {
                 .when(authenticationManager)
                 .authenticate(any(UsernamePasswordAuthenticationToken.class));
 
+        Mockito.verify(userService).getByEmail(loginRequest.getEmail());
         assertThrows(RuntimeException.class,
                 () -> authServiceImpl.login(loginRequest));
     }
