@@ -1,9 +1,10 @@
-package com.candyshop.service;
+package com.candyshop.service.impl;
 
 import com.candyshop.entity.Product;
 import com.candyshop.entity.enums.Balance;
 import com.candyshop.exception.ResourceNotFoundException;
 import com.candyshop.repository.ProductRepository;
+import com.candyshop.service.ImageService;
 import com.candyshop.service.impl.ProductServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

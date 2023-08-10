@@ -1,4 +1,4 @@
-package com.candyshop.service;
+package com.candyshop.service.impl;
 
 import com.candyshop.dto.OrderCreateDto;
 import com.candyshop.entity.Basket;
@@ -8,6 +8,7 @@ import com.candyshop.entity.ProductOrder;
 import com.candyshop.entity.enums.Status;
 import com.candyshop.exception.ResourceNotFoundException;
 import com.candyshop.repository.OrderRepository;
+import com.candyshop.service.CollectProductsService;
 import com.candyshop.service.impl.OrderServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

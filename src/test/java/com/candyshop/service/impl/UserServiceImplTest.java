@@ -1,4 +1,4 @@
-package com.candyshop.service;
+package com.candyshop.service.impl;
 
 import com.candyshop.entity.Basket;
 import com.candyshop.entity.User;
